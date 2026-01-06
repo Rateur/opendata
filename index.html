@@ -79,6 +79,14 @@
             font-weight: 500; font-size: 0.95rem; transition: color 0.3s;
         }
         .nav-links a:hover { color: var(--brand-color); }
+        .nav-toggle {
+            display: none; align-items: center; justify-content: center;
+            background: var(--brand-color); color: white;
+            border: none; padding: 0.55rem 0.9rem;
+            border-radius: 10px; font-weight: 700; cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+        .nav-toggle:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
 
         /* HERO */
         header {
@@ -101,7 +109,7 @@
         }
 
         /* LAYOUT */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; margin-top: 2rem; }
         section { scroll-margin-top: 100px; margin-bottom: 6rem; }
 
         .section-header { text-align: center; margin-bottom: 3rem; }
@@ -174,10 +182,35 @@
         footer a { color: white; text-decoration: none; border-bottom: 1px dotted #94a3b8; }
 
         @media (max-width: 768px) {
+            nav { padding: 0.9rem 1.25rem; }
             h1 { font-size: 2.2rem; }
+            header { padding: 5rem 1.25rem 4rem; }
+            .subtitle { font-size: 1.05rem; }
+            .container { padding: 0 1.25rem; margin-top: 1.5rem; }
+            .card { padding: 1.6rem; }
+            section { margin-bottom: 4rem; }
             .contexte-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: absolute; top: 64px; left: 0; right: 0;
+                background: white; flex-direction: column; gap: 0.75rem;
+                padding: 0; border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+                overflow: hidden; max-height: 0; opacity: 0;
+                transform: translateY(-8px);
+                transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+                pointer-events: none;
+            }
+            .nav-links.open { 
+                padding: 1rem 1.5rem;
+                max-height: 320px; opacity: 1; transform: translateY(0);
+                pointer-events: auto;
+            }
+            .nav-links a { font-size: 1rem; }
             .kpi-container { grid-template-columns: 1fr; }
+            .chart-wrapper { height: 260px !important; }
+            .controls { flex-wrap: wrap; }
+            .btn-pill { width: 100%; max-width: 220px; text-align: center; }
         }
     </style>
 </head>
@@ -185,6 +218,7 @@
 
     <nav>
         <div class="brand">OpenData<span>University</span></div>
+        <button class="nav-toggle" aria-expanded="false" aria-label="Ouvrir ou fermer le menu">Menu</button>
         <div class="nav-links">
             <a href="#contexte">Le Projet</a>
             <a href="#global">Volume Global</a>
@@ -210,29 +244,29 @@
                         <h3 style="color: var(--brand-color); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Le Défi Data.gouv.fr</h3>
                         <h2>Une stagnation inquiétante</h2>
                         <p>
-                            Dans le cadre du défi "Les Françaises et Français face à l'information", nous avons analysé les données de l'INA et de l'ARCOM.
-                            La méthode ? Une segmentation audio automatique sur plus de <strong>700 000 heures</strong> de programmes.
+                            Dans le cadre du défi « Les Françaises et Français face à l'information », nous avons exploité les CSV INA/ARCOM 2019-2020.
+                            Ces données résultent d'une segmentation audio automatique couvrant environ <strong><span id="text-hours-total">--</span> d'audio</strong>.
                         </p>
                         <p>
-                            Le constat est clair : alors que la présence des femmes à l'écran progresse lentement, leur <strong>temps de parole réel</strong> peine à dépasser le tiers du volume global, et ce chiffre a reculé sur les chaînes d'info pendant la crise COVID.
+                            Les mesures 2020 montrent que la <strong>parole des femmes</strong> plafonne à environ 28 % du volume global (sport ~13 %) et recule sur les chaînes d'info pendant la crise COVID.
                         </p>
                     </div>
                     <div class="kpi-container">
                         <div class="kpi-box">
-                            <span class="kpi-num" style="color: var(--color-women);">35%</span>
-                            <span class="kpi-label">Parole Femmes 2020</span>
+                            <span class="kpi-num" id="kpi-women-rate" style="color: var(--color-women);">--%</span>
+                            <span class="kpi-label">Parole des femmes 2020</span>
                         </div>
                         <div class="kpi-box">
-                            <span class="kpi-num" style="color: var(--color-neg);">13%</span>
-                            <span class="kpi-label">Dans le Sport</span>
+                            <span class="kpi-num" id="kpi-sport-rate" style="color: var(--color-neg);">--%</span>
+                            <span class="kpi-label">Dans le sport (2020)</span>
                         </div>
                         <div class="kpi-box">
-                            <span class="kpi-num">700k</span>
-                            <span class="kpi-label">Heures Analysées</span>
+                            <span class="kpi-num" id="kpi-hours">--k</span>
+                            <span class="kpi-label">Heures analysées 2020</span>
                         </div>
                         <div class="kpi-box">
-                            <span class="kpi-num" style="color: var(--brand-color);">2019</span>
-                            <span class="kpi-label">Année de référence</span>
+                            <span class="kpi-num" id="kpi-ratio" style="color: var(--brand-color);">--</span>
+                            <span class="kpi-label">Parole hommes / femmes</span>
                         </div>
                     </div>
                 </div>
@@ -279,14 +313,14 @@
                 <p>L'égalité dépend de la chaîne et du programme</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
                 
                 <div class="card">
                     <h3>Par Thématique (H/F)</h3>
                     <div class="chart-wrapper" style="height: 300px;">
                         <canvas id="genreChart"></canvas>
                     </div>
-                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Les thématiques les plus équilibrées restent la musique (~44% de parole féminine) et certains magazines/infos. À l'opposé, le sport plafonne à ~13% (hors top 8 affiché ici).</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Les thématiques les plus équilibrées restent la musique (~44 %) et l’info/magazines (~39 %). Le sport a été ajouté au graphique pour comparaison et plafonne autour de 13 %.</p>
                 </div>
 
                 <div class="card">
@@ -307,24 +341,24 @@
         <section id="equipe" class="reveal">
             <div class="section-header">
                 <h2>L'Équipe Open Data</h2>
-                <p>Étudiants et Data Scientists engagés</p>
+                <p>Développeurs IA engagés</p>
             </div>
             
             <div class="team-container">
                 <a class="team-card" href="https://github.com/Rateur" target="_blank" rel="noreferrer">
                     <img class="avatar-img" src="https://unavatar.io/github/Rateur" alt="Valentin PERIES">
                     <h4>Valentin PERIES</h4>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Analyst</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur IA</span>
                 </a>
                 <a class="team-card" href="https://github.com/GautierGavat" target="_blank" rel="noreferrer" data-linkedin="TODO">
                     <img class="avatar-img" src="https://unavatar.io/github/GautierGavat" alt="Gautier Gavat">
                     <h4>Gautier Gavat</h4>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Scientist</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur IA</span>
                 </a>
                 <a class="team-card" href="https://github.com/tousabry69-a11y" target="_blank" rel="noreferrer">
                     <img class="avatar-img" src="https://unavatar.io/github/tousabry69-a11y" alt="Sabry Touam">
                     <h4>Sabry Touam</h4>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur Web</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur IA</span>
                 </a>
             </div>
         </section>
@@ -349,6 +383,22 @@
             });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // NAV MOBILE
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+                navToggle.setAttribute('aria-expanded', navLinks.classList.contains('open'));
+            });
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
 
         // --- 2. CONFIG CHART.JS ---
         Chart.defaults.font.family = "'Roboto', sans-serif";
@@ -379,6 +429,18 @@
 
         const sumField = (arr, field) => arr.reduce((s, row) => s + (Number(row[field]) || 0), 0);
         const pct = (val) => Number((val * 100).toFixed(1));
+        const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+        const formatPercentFR = (val) => `${Number(val).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`;
+        const formatHoursFR = (hours) => {
+            if (!Number.isFinite(hours)) return '—';
+            const value = hours >= 1000 ? hours / 1000 : hours;
+            const suffix = hours >= 1000 ? 'k heures' : 'heures';
+            return `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${suffix}`;
+        };
+        const formatRatioFR = (val) => {
+            if (!Number.isFinite(val)) return '—';
+            return `${val.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}×`;
+        };
 
         // Volume global femmes/hommes (en milliers d'heures) pour 2019 vs 2020
         const buildVolumeData = (chaines) => {
@@ -396,14 +458,23 @@
 
         // Top genres (8) par taux d'expression des femmes 2020
         const buildGenreData = (genres) => {
-            const cleaned = genres
-                .filter(g => typeof g.women_expression_rate_2020 === 'number')
-                .sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0))
-                .slice(0, 8);
+            const valid = genres
+                .filter(g => typeof g.women_expression_rate_2020 === 'number');
+
+            const sorted = [...valid].sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0));
+            let top = sorted.slice(0, 8);
+
+            // Forcer l'inclusion du sport (comparaison) même s'il est hors top 8
+            const sport = valid.find(g => (g.genre || '').toLowerCase().includes('sport'));
+            if (sport && !top.some(g => g.genre === sport.genre)) {
+                top.pop();
+                top.push(sport);
+            }
+
             return {
-                labels: cleaned.map(g => g.genre),
-                women: cleaned.map(g => pct(g.women_expression_rate_2020 || 0)),
-                men: cleaned.map(g => 100 - pct(g.women_expression_rate_2020 || 0))
+                labels: top.map(g => g.genre),
+                women: top.map(g => pct(g.women_expression_rate_2020 || 0)),
+                men: top.map(g => 100 - pct(g.women_expression_rate_2020 || 0))
             };
         };
 
@@ -574,6 +645,28 @@
                 ]);
                 const chaines = parseCSV(chainesText);
                 const genres = parseCSV(genresText);
+
+                // KPI dynamiques (liés aux CSV)
+                const womenSpeech = sumField(chaines, 'women_speech_duration_2020');
+                const menSpeech = sumField(chaines, 'men_speech_duration_2020');
+                const speechPair = womenSpeech + menSpeech;
+                const womenRate = speechPair ? (womenSpeech / speechPair) * 100 : 0;
+                setText('kpi-women-rate', formatPercentFR(womenRate));
+                const ratioHM = womenSpeech ? (menSpeech / womenSpeech) : null;
+                setText('kpi-ratio', formatRatioFR(ratioHM));
+
+                const sportRow = genres.find(g => (g.genre || '').toLowerCase().includes('sport'));
+                const sportRate = sportRow?.women_expression_rate_2020;
+                setText('kpi-sport-rate', typeof sportRate === 'number' ? formatPercentFR(pct(sportRate)) : '—');
+
+                const hours2020 = sumField(chaines, 'total_declarations_duration_2020') / 3600;
+                const hours2019 = sumField(chaines, 'total_declarations_duration_2019') / 3600;
+                const hoursTotal = hours2019 + hours2020;
+                setText('kpi-hours', formatHoursFR(hours2020));
+                setText('text-hours-total', `${hoursTotal.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} heures`);
+
+                const editorsCount = new Set(chaines.map(r => r.Editeur).filter(Boolean)).size;
+                setText('kpi-editors', editorsCount || '—');
 
                 const volumeData = buildVolumeData(chaines);
                 const genreData = buildGenreData(genres);
