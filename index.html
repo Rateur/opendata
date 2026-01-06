@@ -4,368 +4,433 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parité & Médias - Open Data University</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:wght@300;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.0.2"></script>
     
     <style>
-        /* --- CHARTE GRAPHIQUE "DOUCE & PROFESSIONNELLE" --- */
+        /* --- CHARTE GRAPHIQUE PREMIUM --- */
         :root {
-            /* Palette Pastel & Sérieuse */
-            --bg-body: #fdfbf7;       /* Crème très léger (papier) */
-            --bg-card: #ffffff;       /* Blanc pur */
-            --text-main: #2c3e50;     /* Bleu nuit profond (lisibilité) */
-            --text-light: #607d8b;    /* Gris bleu doux */
+            /* Fonds et Textes */
+            --bg-body: #f4f6f8;       /* Gris bleuté très clair (reposant) */
+            --bg-card: #ffffff;       /* Blanc pur pour les contenus */
+            --text-primary: #1e293b;  /* Bleu nuit très sombre (lisibilité max) */
+            --text-secondary: #64748b; /* Gris ardoise */
             
-            /* Couleurs des Données */
-            --color-women: #ff8a65;   /* Corail doux (chaleureux, pas agressif) */
-            --color-men: #90a4ae;     /* Bleu gris acier (neutre) */
-            --color-highlight: #4db6ac; /* Vert d'eau (positif) */
-            --color-alert: #e57373;   /* Rouge pastel (négatif) */
+            /* Identité Visuelle */
+            --brand-color: #2563eb;   /* Bleu Royal (Confiance) */
+            
+            /* Data Colors (Haut Contraste) */
+            --color-women: #ff6b6b;   /* Corail vif */
+            --color-men: #94a3b8;     /* Gris acier (neutre) */
+            --color-pos: #10b981;     /* Émeraude */
+            --color-neg: #ef4444;     /* Rouge alerte */
 
-            --primary-brand: #34495e; /* Identité Open Data */
-            
-            --radius: 12px;
-            --shadow: 0 4px 20px rgba(0,0,0,0.04);
+            --radius: 16px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* --- GLOBAL --- */
+        html {
+            scroll-behavior: smooth; /* Navigation fluide native */
         }
 
         body {
-            font-family: 'Lato', sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: var(--bg-body);
-            color: var(--text-main);
+            color: var(--text-primary);
             margin: 0;
             padding: 0;
-            line-height: 1.8;
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION / HEADER --- */
+        h1, h2, h3, h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            margin-top: 0;
+        }
+
+        /* --- ANIMATIONS (Reveal on Scroll) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- NAVIGATION STICKY --- */
         nav {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            box-shadow: var(--shadow-sm);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            transition: padding 0.3s;
         }
 
         .brand {
-            font-family: 'Merriweather', serif;
-            font-weight: 900;
-            font-size: 1.2rem;
-            color: var(--primary-brand);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--text-primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .brand span { color: var(--color-women); }
+        .brand span { color: var(--brand-color); }
 
+        .nav-links { display: flex; gap: 2rem; }
+        
         .nav-links a {
             text-decoration: none;
-            color: var(--text-light);
-            margin-left: 2rem;
-            font-weight: 600;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
             transition: color 0.3s;
+            position: relative;
         }
-        .nav-links a:hover { color: var(--color-women); }
+
+        .nav-links a:hover { color: var(--brand-color); }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--brand-color);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover::after { width: 100%; }
 
         /* --- HERO SECTION --- */
         header {
             text-align: center;
-            padding: 6rem 2rem 4rem;
-            background: linear-gradient(180deg, #fff 0%, var(--bg-body) 100%);
+            padding: 8rem 2rem 6rem;
+            background: radial-gradient(circle at top right, #eef2ff, transparent 40%),
+                        radial-gradient(circle at bottom left, #fff1f2, transparent 40%);
         }
 
         h1 {
-            font-family: 'Merriweather', serif;
-            font-size: 3.2rem;
-            color: var(--text-main);
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+        
+        h1 span {
+            background: linear-gradient(120deg, var(--brand-color), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
             font-size: 1.25rem;
-            color: var(--text-light);
+            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto;
             font-weight: 300;
         }
 
-        /* --- LAYOUT --- */
+        /* --- LAYOUT & SECTIONS --- */
         .container {
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        .section-title {
+        /* Permet de décaler l'ancre pour que le header ne cache pas le titre */
+        section {
+            scroll-margin-top: 100px;
+            margin-bottom: 6rem;
+        }
+
+        .section-header {
             text-align: center;
-            margin: 5rem 0 3rem;
-            font-family: 'Merriweather', serif;
-            color: var(--primary-brand);
-        }
-        .section-title h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        .section-title p { color: var(--text-light); font-style: italic; }
-
-        /* --- LE PROJET (CONTEXTE) --- */
-        .project-card {
-            background: white;
-            border-radius: var(--radius);
-            padding: 3rem;
-            box-shadow: var(--shadow);
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 3rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .project-info h3 {
-            color: var(--color-women);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-        .project-info p { margin-bottom: 1.5rem; text-align: justify;}
-
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-        .kpi {
-            text-align: center;
-            padding: 1.5rem;
-            background: var(--bg-body);
-            border-radius: 8px;
-        }
-        .kpi strong { display: block; font-size: 2rem; color: var(--primary-brand); font-family: 'Merriweather', serif; }
-        .kpi span { font-size: 0.8rem; text-transform: uppercase; color: var(--text-light); font-weight: 700;}
-
-        /* --- GRAPHIQUES --- */
-        .chart-section {
-            background: white;
-            padding: 2.5rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
             margin-bottom: 3rem;
         }
+        .section-header h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        .section-header p { color: var(--text-secondary); }
 
-        .chart-header { margin-bottom: 2rem; border-left: 4px solid var(--color-women); padding-left: 1.5rem; }
-        .chart-header h3 { margin: 0; font-size: 1.5rem; font-family: 'Merriweather', serif; }
-        .chart-header p { margin: 0.5rem 0 0; color: var(--text-light); font-size: 0.95rem; }
-
-        .analysis-text {
-            background-color: #fcfcfc;
-            border: 1px solid #eee;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 2rem;
-            font-size: 1rem;
-            color: #455a64;
+        /* --- CARDS (Style Glass/Modern) --- */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255,255,255,0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        .analysis-text h4 { margin-top: 0; color: var(--color-women); display: flex; align-items: center; gap: 8px;}
-        
-        /* FILTRES BOUTONS */
-        .filters { text-align: center; margin-bottom: 2rem; }
-        .btn {
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* --- CONTEXTE & KPI --- */
+        .contexte-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .kpi-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .kpi-box {
             background: white;
-            border: 1px solid #dcdcdc;
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Lato', sans-serif;
-            color: var(--text-light);
-            margin: 0 0.3rem;
-            transition: all 0.2s;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            border-bottom: 4px solid var(--brand-color);
         }
-        .btn:hover, .btn.active {
-            background: var(--primary-brand);
-            color: white;
-            border-color: var(--primary-brand);
-            box-shadow: 0 4px 10px rgba(52, 73, 94, 0.2);
+        
+        .kpi-num { display: block; font-size: 2.5rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.5rem; font-family: 'Poppins'; }
+        .kpi-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; }
+
+        /* --- GRAPHIQUES --- */
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            width: 100%;
         }
 
-        /* --- TEAM SECTION --- */
-        .team-grid {
+        .insight-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f1f5f9;
+            border-radius: 8px;
+            border-left: 4px solid var(--color-women);
+        }
+        .insight-box h4 { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
+
+        /* --- CONTROLS --- */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-pill {
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-pill:hover, .btn-pill.active {
+            border-color: var(--brand-color);
+            background: var(--brand-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        /* --- TEAM --- */
+        .team-container {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            margin-top: 3rem;
             flex-wrap: wrap;
         }
-        .team-member {
+
+        .team-card {
             background: white;
             padding: 2rem;
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            width: 220px;
             text-align: center;
-            width: 200px;
             transition: transform 0.3s;
         }
-        .team-member:hover { transform: translateY(-5px); }
-        .avatar {
+        .team-card:hover { transform: translateY(-8px); }
+
+        .avatar-circle {
             width: 80px;
             height: 80px;
-            background: #eceff1;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            color: var(--brand-color);
             border-radius: 50%;
-            margin: 0 auto 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            color: var(--text-light);
+            font-weight: 700;
+            margin: 0 auto 1rem;
         }
-        .team-member h4 { margin: 0; color: var(--primary-brand); }
-        .team-member span { font-size: 0.85rem; color: var(--color-women); font-weight: 600; }
 
         footer {
-            background: var(--primary-brand);
-            color: white;
-            padding: 3rem;
+            background: #0f172a;
+            color: #94a3b8;
             text-align: center;
-            margin-top: 5rem;
-            font-size: 0.9rem;
+            padding: 4rem 2rem;
+            margin-top: 4rem;
         }
-        footer a { color: var(--color-women); text-decoration: none; border-bottom: 1px solid rgba(255,138,101,0.3); }
+        footer a { color: white; text-decoration: none; border-bottom: 1px dotted #94a3b8; }
+        footer a:hover { color: var(--color-women); }
 
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .contexte-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; } /* Pour simplifier sur mobile */
+            .kpi-container { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="brand">Open Data <span>University</span></div>
+        <div class="brand">
+            OpenData<span>University</span>
+        </div>
         <div class="nav-links">
-            <a href="#contexte">Le Défi</a>
-            <a href="#analyse">L'Analyse</a>
+            <a href="#contexte">Le Projet</a>
+            <a href="#evolution">Évolution</a>
+            <a href="#analyse">Analyses</a>
             <a href="#equipe">L'Équipe</a>
         </div>
     </nav>
 
-    <header>
-        <h1>Les Français face à l'Information</h1>
-        <p class="subtitle">Comment la crise de 2020 a figé la parole féminine dans les médias. <br>Une analyse des données INA & ARCOM.</p>
+    <header class="reveal">
+        <div class="container">
+            <h1>Les Français face à <br><span>l'Information</span></h1>
+            <p class="subtitle">Comment la crise sanitaire de 2020 a figé la parole des femmes dans les médias audiovisuels.</p>
+        </div>
     </header>
 
     <div class="container">
 
-        <section id="contexte" class="project-card">
-            <div class="project-desc">
-                <h3>Contexte de l'étude</h3>
-                <h2 style="font-family: Merriweather; margin-top:0;">Le Défi Open Data</h2>
-                <p>
-                    Ce projet s'inscrit dans le cadre du défi <strong>"Les Françaises et Français face à l'information"</strong>. 
-                    Notre objectif : utiliser les données ouvertes pour questionner la représentativité médiatique.
-                </p>
-                <p>
-                    Nous avons exploité le jeu de données issu de l'INA (Institut National de l'Audiovisuel) et de l'ARCOM. 
-                    En analysant plus de 700 000 heures de programmes via des algorithmes de segmentation audio, 
-                    nous mettons en lumière une stagnation inquiétante de la parole féminine, particulièrement en temps de crise.
-                </p>
-            </div>
-            <div class="kpi-grid">
-                <div class="kpi">
-                    <strong>35%</strong>
-                    <span>Parole Femmes (2020)</span>
-                </div>
-                <div class="kpi">
-                    <strong>13%</strong>
-                    <span>Taux Sport</span>
-                </div>
-                <div class="kpi">
-                    <strong>700k</strong>
-                    <span>Heures Analysées</span>
+        <section id="contexte" class="reveal">
+            <div class="card">
+                <div class="contexte-grid">
+                    <div>
+                        <h3 style="color: var(--brand-color); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px;">Le Défi Data.gouv.fr</h3>
+                        <h2>Une stagnation inquiétante</h2>
+                        <p>
+                            Dans le cadre du défi "Les Françaises et Français face à l'information", nous avons analysé les données de l'INA et de l'ARCOM.
+                            La méthode ? Une segmentation audio automatique sur plus de <strong>700 000 heures</strong> de programmes.
+                        </p>
+                        <p>
+                            Le constat est clair : alors que la présence des femmes à l'écran progresse lentement, leur <strong>temps de parole réel</strong> peine à dépasser le tiers du volume global, et ce chiffre a reculé sur les chaînes d'info pendant la crise COVID.
+                        </p>
+                    </div>
+                    <div class="kpi-container">
+                        <div class="kpi-box">
+                            <span class="kpi-num" style="color: var(--color-women);">35%</span>
+                            <span class="kpi-label">Parole Femmes 2020</span>
+                        </div>
+                        <div class="kpi-box">
+                            <span class="kpi-num" style="color: var(--color-neg);">13%</span>
+                            <span class="kpi-label">Dans le Sport</span>
+                        </div>
+                        <div class="kpi-box">
+                            <span class="kpi-num">700k</span>
+                            <span class="kpi-label">Heures Analysées</span>
+                        </div>
+                        <div class="kpi-box">
+                            <span class="kpi-num" style="color: var(--brand-color);">2019</span>
+                            <span class="kpi-label">Année de référence</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div class="section-title">
-            <h2>Exploration des Données</h2>
-            <p>Visualisations interactives et constats</p>
-        </div>
+        <section id="evolution" class="reveal">
+            <div class="section-header">
+                <h2>L'Effet Crise Sanitaire</h2>
+                <p>La "parole d'autorité" reste masculine en temps de crise</p>
+            </div>
 
-        <section id="analyse" class="chart-section">
-            <div class="chart-header">
-                <h3>L'Effet Covid : Stagnation ou Recul ?</h3>
-                <p>Comparaison du temps de parole estimé (2019 vs 2020)</p>
+            <div class="card">
+                <div class="chart-wrapper">
+                    <canvas id="scatterChart"></canvas>
+                </div>
+                <div class="insight-box">
+                    <h4>🔍 Décryptage</h4>
+                    <p>Ce graphique compare 2019 (axe X) à 2020 (axe Y). La ligne pointillée représente la stagnation. 
+                    <strong>Les points en dessous de la ligne (en rouge)</strong> montrent les chaînes où la parole des femmes a reculé pendant le confinement (BFM, CNews, France Inter). L'urgence a favorisé le recours à des experts masculins.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="analyse" class="reveal">
+            <div class="section-header">
+                <h2>Disparités & Bons Élèves</h2>
+                <p>L'égalité dépend de la chaîne et du programme</p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem;">
+                
+                <div class="card">
+                    <h3>Par Thématique</h3>
+                    <div class="chart-wrapper" style="height: 300px;">
+                        <canvas id="genreChart"></canvas>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Le sport reste le mauvais élève (13%), loin derrière la musique ou la fiction.</p>
+                </div>
+
+                <div class="card">
+                    <h3>Par Chaîne</h3>
+                    <div class="controls" style="margin-top: 1rem; margin-bottom: 1rem;">
+                        <button class="btn-pill active" data-type="all">Tout</button>
+                        <button class="btn-pill" data-type="radio">Radio</button>
+                        <button class="btn-pill" data-type="tv">TV</button>
+                    </div>
+                    <div class="chart-wrapper" style="height: 300px;">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="equipe" class="reveal">
+            <div class="section-header">
+                <h2>L'Équipe Open Data</h2>
+                <p>Étudiants et Data Scientists engagés</p>
             </div>
             
-            <div style="height: 400px; width: 100%;">
-                <canvas id="scatterEvolution"></canvas>
-            </div>
-
-            <div class="analysis-text">
-                <h4>💡 Notre constat</h4>
-                <p>
-                    La diagonale en pointillés représente une stabilité parfaite. Les points situés <strong>en dessous</strong> (comme BFM TV ou CNews) montrent un recul de la parole des femmes en 2020. 
-                    L'urgence de la crise sanitaire a favorisé un retour vers des figures d'autorité "classiques" (politiques, experts médicaux) majoritairement masculines, freinant la dynamique de parité engagée en 2019.
-                </p>
-            </div>
-        </section>
-
-        <section class="chart-section">
-            <div class="chart-header">
-                <h3>Disparités Thématiques</h3>
-                <p>La parité dépend fortement du type de programme regardé</p>
-            </div>
-            
-            <div style="height: 350px; width: 100%;">
-                <canvas id="genreChart"></canvas>
-            </div>
-
-            <div class="analysis-text">
-                <h4>💡 Analyse sectorielle</h4>
-                <p>
-                    Si la fiction et la musique s'approchent de l'équilibre, le <strong>Sport</strong> reste un plafond de verre massif avec seulement 13% de temps de parole féminin. 
-                    Paradoxalement, les magazines d'information, censés approfondir les sujets, donnent moins la parole aux femmes que les journaux télévisés (JT).
-                </p>
-            </div>
-        </section>
-
-        <section class="chart-section">
-            <div class="chart-header">
-                <h3>Classement des Diffuseurs</h3>
-                <p>Explorez les performances par chaîne (TV et Radio)</p>
-            </div>
-
-            <div class="filters">
-                <button class="btn active" data-type="all">Vue d'ensemble</button>
-                <button class="btn" data-type="radio">Radio</button>
-                <button class="btn" data-type="tv">Télévision</button>
-            </div>
-
-            <div style="height: 500px; width: 100%;">
-                <canvas id="channelInteractiveChart"></canvas>
-            </div>
-        </section>
-
-        <section id="equipe" style="margin-bottom: 5rem;">
-            <div class="section-title">
-                <h2>L'Équipe Projet</h2>
-                <p>Open Data University</p>
-            </div>
-            
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="avatar">VP</div>
+            <div class="team-container">
+                <div class="team-card">
+                    <div class="avatar-circle">VP</div>
                     <h4>Valentin PERIES</h4>
-                    <span>Data Analyst</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Analyst</span>
                 </div>
-                <div class="team-member">
-                    <div class="avatar">GG</div>
+                <div class="team-card">
+                    <div class="avatar-circle">GG</div>
                     <h4>Gautier Gavat</h4>
-                    <span>Data Scientist</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Scientist</span>
                 </div>
-                <div class="team-member">
-                    <div class="avatar">ST</div>
+                <div class="team-card">
+                    <div class="avatar-circle">ST</div>
                     <h4>Sabry Touam</h4>
-                    <span>Développeur</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur Web</span>
                 </div>
             </div>
         </section>
@@ -373,74 +438,79 @@
     </div>
 
     <footer>
-        <p>Projet réalisé avec passion pour le défi Data.gouv.fr.</p>
-        <p>Sources des données : <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4" target="_blank">INA & ARCOM (2010-2020)</a></p>
+        <p>Projet réalisé pour le défi <strong>Data.gouv.fr</strong></p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Données : INA & ARCOM (2010-2020) | Traitement : Python & Pandas</p>
     </footer>
 
     <script>
-        // --- CONFIGURATION CHART.JS (STYLE PRO) ---
-        Chart.defaults.font.family = "'Lato', sans-serif";
-        Chart.defaults.color = '#607d8b';
-        Chart.defaults.plugins.tooltip.backgroundColor = '#2c3e50';
-        Chart.defaults.plugins.tooltip.padding = 15;
-        Chart.defaults.plugins.tooltip.cornerRadius = 6;
-
-        // Palette Pastel
-        const theme = {
-            women: '#ff8a65', // Corail
-            men: '#cfd8dc',   // Gris très clair pour contraste
-            highlight: '#4db6ac', // Teal
-            danger: '#e57373'  // Rouge doux
+        // --- 1. GESTION DES ANIMATIONS (Intersection Observer) ---
+        const observerOptions = {
+            threshold: 0.1, // Déclenche quand 10% de l'élément est visible
+            rootMargin: "0px 0px -50px 0px"
         };
 
-        // --- DONNÉES ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Ne joue qu'une fois
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+        // --- 2. CONFIG CHART.JS ---
+        Chart.defaults.font.family = "'Roboto', sans-serif";
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.scale.grid.color = '#f1f5f9';
+        
+        // Couleurs
+        const C_WOMEN = '#ff6b6b';
+        const C_MEN = '#94a3b8';
+        const C_NEG = '#ef4444';
+        const C_POS = '#10b981';
+
+        // --- DATA ---
         const genreData = {
-            labels: ['Musique', 'Info - Journal', 'Magazine', 'Documentaire', 'Divertissement', 'Sport'],
+            labels: ['Musique', 'Info JT', 'Magazine', 'Docu', 'Divert.', 'Sport'],
             data: [44.0, 39.2, 39.0, 38.0, 35.1, 13.1]
         };
 
-        const allChannelsData = [
+        const channels = [
             { label: 'Fip', data: 70.3, type: 'radio' },
             { label: 'TFX', data: 46.4, type: 'tv' },
             { label: 'France Culture', data: 39.8, type: 'radio' },
             { label: 'France Inter', data: 39.3, type: 'radio' },
-            { label: 'M6', data: 38.5, type: 'tv' },
             { label: 'TF1', data: 36.2, type: 'tv' },
             { label: 'France 2', data: 35.1, type: 'tv' },
-            { label: 'France Info', data: 33.1, type: 'radio' },
             { label: 'BFM TV', data: 31.5, type: 'tv' },
             { label: 'CNews', data: 28.2, type: 'tv' },
-            { label: 'NRJ', data: 23.1, type: 'radio' },
-            { label: 'TMC', data: 21.3, type: 'tv' },
             { label: 'RMC', data: 17.5, type: 'radio' },
             { label: 'L\'Équipe', data: 15.2, type: 'tv' }
-        ].sort((a, b) => b.data - a.data);
+        ].sort((a,b) => b.data - a.data);
 
-        const scatterDataPoints = [
+        const scatterPoints = [
             { x: 42, y: 39.3, label: 'France Inter' },
             { x: 35, y: 35.1, label: 'France 2' },
-            { x: 33, y: 31.5, label: 'BFM TV' },
-            { x: 14, y: 13.1, label: 'Sport (Genre)' },
-            { x: 40, y: 39.2, label: 'Info JT' },
-            { x: 30, y: 28.2, label: 'CNews' },
+            { x: 33, y: 31.5, label: 'BFM TV' }, // Recul
+            { x: 30, y: 28.2, label: 'CNews' }, // Recul
             { x: 71, y: 70.3, label: 'Fip' },
             { x: 18, y: 17.5, label: 'RMC' }
         ];
 
-        // --- INIT GRAPHIQUES ---
-        
-        // 1. SCATTERPLOT
-        const ctxScatter = document.getElementById('scatterEvolution').getContext('2d');
-        const scatterChart = new Chart(ctxScatter, {
+        // --- CHART 1: SCATTER (Evolution) ---
+        new Chart(document.getElementById('scatterChart'), {
             type: 'scatter',
             data: {
                 datasets: [{
-                    label: 'Progression 2019-2020',
-                    data: scatterDataPoints,
+                    label: 'Chaînes',
+                    data: scatterPoints,
                     backgroundColor: (ctx) => {
                         const v = ctx.raw;
-                        if (!v) return theme.women;
-                        return v.y < v.x - 0.5 ? theme.danger : theme.highlight;
+                        if(!v) return C_WOMEN;
+                        return v.y < v.x - 1 ? C_NEG : C_POS; // Rouge si recul > 1%
                     },
                     pointRadius: 8,
                     pointHoverRadius: 12
@@ -450,23 +520,21 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    x: { title: { display: true, text: '2019 (%)' }, min: 10, max: 75 },
-                    y: { title: { display: true, text: '2020 (%)' }, min: 10, max: 75 }
+                    x: { title: {display:true, text:'2019 (Pré-Covid) %'}, min: 10, max: 80 },
+                    y: { title: {display:true, text:'2020 (Covid) %'}, min: 10, max: 80 }
                 },
                 plugins: {
-                    legend: { display: false },
+                    legend: {display: false},
                     tooltip: {
-                         callbacks: {
-                            label: (c) => `${c.raw.label} : ${c.raw.x}% ➝ ${c.raw.y}%`
-                        }
+                        callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% -> ${c.raw.y}%` }
                     },
                     annotation: {
                         annotations: {
                             line1: {
                                 type: 'line',
-                                xMin: 10, xMax: 75, yMin: 10, yMax: 75,
-                                borderColor: '#b0bec5', borderWidth: 1, borderDash: [5, 5],
-                                label: { enabled: true, content: 'Stagnation', position: 'end', color: '#b0bec5', backgroundColor: 'transparent' }
+                                xMin: 10, xMax: 80, yMin: 10, yMax: 80,
+                                borderColor: '#cbd5e1', borderWidth: 2, borderDash: [5,5],
+                                label: { enabled: true, content: 'Stagnation', position: 'end', color: '#94a3b8', backgroundColor:'transparent' }
                             }
                         }
                     }
@@ -474,16 +542,14 @@
             }
         });
 
-        // 2. GENRES BAR
-        const ctxGenre = document.getElementById('genreChart').getContext('2d');
-        new Chart(ctxGenre, {
+        // --- CHART 2: GENRE (Horizontal) ---
+        new Chart(document.getElementById('genreChart'), {
             type: 'bar',
             data: {
                 labels: genreData.labels,
                 datasets: [{
-                    label: 'Parole Femmes',
                     data: genreData.data,
-                    backgroundColor: theme.women,
+                    backgroundColor: genreData.data.map(v => v < 20 ? C_NEG : C_WOMEN),
                     borderRadius: 4,
                     barPercentage: 0.6
                 }]
@@ -492,65 +558,58 @@
                 indexAxis: 'y',
                 responsive: true,
                 maintainAspectRatio: false,
-                scales: {
-                    x: { max: 50, grid: { display: false } },
-                    y: { grid: { display: false } }
-                },
-                plugins: { legend: { display: false } }
+                scales: { x: { max: 50, grid: {display:false} }, y: { grid: {display:false} } },
+                plugins: { legend: {display:false} }
             }
         });
 
-        // 3. CHAINES FILTRABLE
-        let channelChart;
-        function renderChannelChart(type) {
-            const ctx = document.getElementById('channelInteractiveChart').getContext('2d');
-            let data = allChannelsData;
-            if(type !== 'all') data = allChannelsData.filter(d => d.type === type);
+        // --- CHART 3: INTERACTIVE CHANNELS ---
+        let myChannelChart;
+        function drawChannelChart(filter) {
+            const ctx = document.getElementById('channelChart').getContext('2d');
+            let d = channels;
+            if(filter !== 'all') d = channels.filter(x => x.type === filter);
 
-            if(channelChart) channelChart.destroy();
+            if(myChannelChart) myChannelChart.destroy();
 
-            channelChart = new Chart(ctx, {
+            myChannelChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.map(d => d.label),
-                    datasets: [
-                        {
-                            label: 'Femmes',
-                            data: data.map(d => d.data),
-                            backgroundColor: theme.women,
-                            borderRadius: 4
-                        },
-                        {
-                            label: 'Hommes',
-                            data: data.map(d => 100 - d.data),
-                            backgroundColor: theme.men,
-                            borderRadius: 4,
-                            hidden: true 
-                        }
-                    ]
+                    labels: d.map(x => x.label),
+                    datasets: [{
+                        label: 'Femmes',
+                        data: d.map(x => x.data),
+                        backgroundColor: C_WOMEN,
+                        borderRadius: 4
+                    }, {
+                        label: 'Hommes',
+                        data: d.map(x => 100 - x.data),
+                        backgroundColor: C_MEN,
+                        borderRadius: 4,
+                        hidden: true
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: { max: 100, title: {display:true, text:'Part de voix (%)'} },
+                        y: { max: 100 },
                         x: { grid: {display:false} }
-                    }
+                    },
+                    plugins: { legend: {display:false} }
                 }
             });
         }
 
-        // Gestion Filtres
-        document.querySelectorAll('.btn').forEach(btn => {
+        // Init Chart 3 & Listeners
+        drawChannelChart('all');
+        document.querySelectorAll('.btn-pill').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                renderChannelChart(this.dataset.type);
+                drawChannelChart(this.dataset.type);
             });
         });
-
-        // Init
-        renderChannelChart('all');
 
     </script>
 </body>
