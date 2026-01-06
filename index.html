@@ -11,37 +11,32 @@
     <style>
         /* --- CHARTE GRAPHIQUE PREMIUM --- */
         :root {
-            /* Fonds et Textes */
-            --bg-body: #f4f6f8;       /* Gris bleuté très clair (reposant) */
-            --bg-card: #ffffff;       /* Blanc pur pour les contenus */
-            --text-primary: #1e293b;  /* Bleu nuit très sombre (lisibilité max) */
-            --text-secondary: #64748b; /* Gris ardoise */
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
             
-            /* Identité Visuelle */
-            --brand-color: #2563eb;   /* Bleu Royal (Confiance) */
+            --brand-color: #3b82f6; /* Bleu Principal */
             
-            /* Data Colors (Haut Contraste) */
-            --color-women: #ff6b6b;   /* Corail vif */
-            --color-men: #94a3b8;     /* Gris acier (neutre) */
-            --color-pos: #10b981;     /* Émeraude */
-            --color-neg: #ef4444;     /* Rouge alerte */
+            /* Couleurs Data (Contraste Fort) */
+            --color-women: #ff6b6b;   /* Corail (Femmes) */
+            --color-men: #3b82f6;     /* Bleu Roi (Hommes) - NOUVEAU */
+            
+            --color-pos: #10b981;     /* Vert (Progression) */
+            --color-neg: #ef4444;     /* Rouge (Recul) */
 
             --radius: 16px;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
-        /* --- GLOBAL --- */
-        html {
-            scroll-behavior: smooth; /* Navigation fluide native */
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Roboto', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-primary);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -52,252 +47,134 @@
             margin-top: 0;
         }
 
-        /* --- ANIMATIONS (Reveal on Scroll) --- */
+        /* ANIMATIONS */
         .reveal {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0; transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* --- NAVIGATION STICKY --- */
+        /* NAVIGATION */
         nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
             padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: var(--shadow-sm);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            transition: padding 0.3s;
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid #e2e8f0;
         }
 
         .brand {
             font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 700; font-size: 1.3rem;
+            color: var(--text-primary); display: flex; align-items: center; gap: 8px;
         }
-
         .brand span { color: var(--brand-color); }
 
         .nav-links { display: flex; gap: 2rem; }
-        
         .nav-links a {
-            text-decoration: none;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s;
-            position: relative;
+            text-decoration: none; color: var(--text-secondary);
+            font-weight: 500; font-size: 0.95rem; transition: color 0.3s;
         }
-
         .nav-links a:hover { color: var(--brand-color); }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: var(--brand-color);
-            transition: width 0.3s;
-        }
-        .nav-links a:hover::after { width: 100%; }
 
-        /* --- HERO SECTION --- */
+        /* HERO */
         header {
-            text-align: center;
-            padding: 8rem 2rem 6rem;
-            background: radial-gradient(circle at top right, #eef2ff, transparent 40%),
-                        radial-gradient(circle at bottom left, #fff1f2, transparent 40%);
+            text-align: center; padding: 8rem 2rem 6rem;
+            background: radial-gradient(circle at top right, #dbeafe, transparent 40%),
+                        radial-gradient(circle at bottom left, #fee2e2, transparent 40%);
         }
 
         h1 {
-            font-size: 3.5rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            letter-spacing: -1px;
+            font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;
+            font-weight: 800; letter-spacing: -1px;
         }
-        
         h1 span {
-            background: linear-gradient(120deg, var(--brand-color), #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: linear-gradient(120deg, var(--color-women), var(--color-men));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         .subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto;
-            font-weight: 300;
+            font-size: 1.25rem; color: var(--text-secondary);
+            max-width: 700px; margin: 0 auto; font-weight: 300;
         }
 
-        /* --- LAYOUT & SECTIONS --- */
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
+        /* LAYOUT */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+        section { scroll-margin-top: 100px; margin-bottom: 6rem; }
 
-        /* Permet de décaler l'ancre pour que le header ne cache pas le titre */
-        section {
-            scroll-margin-top: 100px;
-            margin-bottom: 6rem;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+        .section-header { text-align: center; margin-bottom: 3rem; }
         .section-header h2 { font-size: 2.2rem; margin-bottom: 0.5rem; }
         .section-header p { color: var(--text-secondary); }
 
-        /* --- CARDS (Style Glass/Modern) --- */
         .card {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            padding: 2.5rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(255,255,255,0.5);
+            background: var(--bg-card); border-radius: var(--radius);
+            padding: 2.5rem; box-shadow: var(--shadow-sm);
+            border: 1px solid #e2e8f0;
             transition: transform 0.3s, box-shadow 0.3s;
         }
+        .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* --- CONTEXTE & KPI --- */
-        .contexte-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .kpi-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
+        /* KPI */
+        .contexte-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 3rem; align-items: center; }
+        .kpi-container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .kpi-box {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
+            background: white; padding: 1.5rem; border-radius: 12px;
+            text-align: center; box-shadow: var(--shadow-sm);
             border-bottom: 4px solid var(--brand-color);
         }
-        
         .kpi-num { display: block; font-size: 2.5rem; font-weight: 700; color: var(--text-primary); line-height: 1; margin-bottom: 0.5rem; font-family: 'Poppins'; }
         .kpi-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-secondary); font-weight: 600; letter-spacing: 0.5px; }
 
-        /* --- GRAPHIQUES --- */
-        .chart-wrapper {
-            position: relative;
-            height: 400px;
-            width: 100%;
-        }
-
+        /* CHARTS & INSIGHTS */
+        .chart-wrapper { position: relative; height: 400px; width: 100%; }
+        
         .insight-box {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: #f1f5f9;
-            border-radius: 8px;
+            margin-top: 2rem; padding: 1.5rem;
+            background: #f8fafc; border-radius: 8px;
             border-left: 4px solid var(--color-women);
         }
-        .insight-box h4 { margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
+        .insight-box h4 { margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-primary); }
 
-        /* --- CONTROLS --- */
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
+        .controls { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
         .btn-pill {
-            padding: 0.6rem 1.8rem;
-            border-radius: 50px;
-            border: 2px solid #e2e8f0;
-            background: white;
-            color: var(--text-secondary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Poppins', sans-serif;
+            padding: 0.6rem 1.8rem; border-radius: 50px;
+            border: 2px solid #e2e8f0; background: white;
+            color: var(--text-secondary); font-weight: 600; cursor: pointer;
+            transition: all 0.2s ease; font-family: 'Poppins', sans-serif;
         }
-
         .btn-pill:hover, .btn-pill.active {
-            border-color: var(--brand-color);
-            background: var(--brand-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            border-color: var(--brand-color); background: var(--brand-color);
+            color: white; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
-        /* --- TEAM --- */
-        .team-container {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
+        /* TEAM */
+        .team-container { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
         .team-card {
-            background: white;
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-sm);
-            width: 220px;
-            text-align: center;
+            background: white; padding: 2rem; border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); width: 220px; text-align: center;
             transition: transform 0.3s;
+            border: 1px solid #e2e8f0;
         }
         .team-card:hover { transform: translateY(-8px); }
-
         .avatar-circle {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-            color: var(--brand-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 1rem;
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            color: var(--brand-color); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: 700; margin: 0 auto 1rem;
         }
 
         footer {
-            background: #0f172a;
-            color: #94a3b8;
-            text-align: center;
-            padding: 4rem 2rem;
-            margin-top: 4rem;
+            background: #0f172a; color: #94a3b8; text-align: center;
+            padding: 4rem 2rem; margin-top: 4rem;
         }
         footer a { color: white; text-decoration: none; border-bottom: 1px dotted #94a3b8; }
-        footer a:hover { color: var(--color-women); }
 
-        /* Responsive */
         @media (max-width: 768px) {
             h1 { font-size: 2.2rem; }
             .contexte-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; } /* Pour simplifier sur mobile */
+            .nav-links { display: none; }
             .kpi-container { grid-template-columns: 1fr; }
         }
     </style>
@@ -305,11 +182,10 @@
 <body>
 
     <nav>
-        <div class="brand">
-            OpenData<span>University</span>
-        </div>
+        <div class="brand">OpenData<span>University</span></div>
         <div class="nav-links">
             <a href="#contexte">Le Projet</a>
+            <a href="#global">Volume Global</a>
             <a href="#evolution">Évolution</a>
             <a href="#analyse">Analyses</a>
             <a href="#equipe">L'Équipe</a>
@@ -361,6 +237,22 @@
             </div>
         </section>
 
+        <section id="global" class="reveal">
+            <div class="section-header">
+                <h2>Le Grand Écart : Volume Global</h2>
+                <p>Comparaison de la masse totale de temps de parole (en millions d'heures)</p>
+            </div>
+            <div class="card">
+                <div class="chart-wrapper" style="height: 350px;">
+                    <canvas id="volumeChart"></canvas>
+                </div>
+                <div class="insight-box">
+                    <h4>Le constat</h4>
+                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Si l'on cumule toutes les heures de tous les programmes, la domination masculine reste écrasante.</p>
+                </div>
+            </div>
+        </section>
+
         <section id="evolution" class="reveal">
             <div class="section-header">
                 <h2>L'Effet Crise Sanitaire</h2>
@@ -372,7 +264,7 @@
                     <canvas id="scatterChart"></canvas>
                 </div>
                 <div class="insight-box">
-                    <h4>🔍 Décryptage</h4>
+                    <h4>Décryptage</h4>
                     <p>Ce graphique compare 2019 (axe X) à 2020 (axe Y). La ligne pointillée représente la stagnation. 
                     <strong>Les points en dessous de la ligne (en rouge)</strong> montrent les chaînes où la parole des femmes a reculé pendant le confinement (BFM, CNews, France Inter). L'urgence a favorisé le recours à des experts masculins.</p>
                 </div>
@@ -396,7 +288,7 @@
                 </div>
 
                 <div class="card">
-                    <h3>Par Chaîne</h3>
+                    <h3>Comparatif Hommes / Femmes</h3>
                     <div class="controls" style="margin-top: 1rem; margin-bottom: 1rem;">
                         <button class="btn-pill active" data-type="all">Tout</button>
                         <button class="btn-pill" data-type="radio">Radio</button>
@@ -443,36 +335,35 @@
     </footer>
 
     <script>
-        // --- 1. GESTION DES ANIMATIONS (Intersection Observer) ---
-        const observerOptions = {
-            threshold: 0.1, // Déclenche quand 10% de l'élément est visible
-            rootMargin: "0px 0px -50px 0px"
-        };
-
+        // --- 1. ANIMATIONS ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Ne joue qu'une fois
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
-
+        }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
 
         // --- 2. CONFIG CHART.JS ---
         Chart.defaults.font.family = "'Roboto', sans-serif";
         Chart.defaults.color = '#64748b';
         Chart.defaults.scale.grid.color = '#f1f5f9';
         
-        // Couleurs
-        const C_WOMEN = '#ff6b6b';
-        const C_MEN = '#94a3b8';
+        // NOUVELLE PALETTE
+        const C_WOMEN = '#ff6b6b'; // Corail
+        const C_MEN = '#3b82f6';   // Bleu Roi (remplace le gris)
         const C_NEG = '#ef4444';
         const C_POS = '#10b981';
 
         // --- DATA ---
+        const volumeData = {
+            labels: ['2019', '2020'],
+            women: [48.7, 48.9],
+            men: [92.5, 91.3]
+        };
+
         const genreData = {
             labels: ['Musique', 'Info JT', 'Magazine', 'Docu', 'Divert.', 'Sport'],
             data: [44.0, 39.2, 39.0, 38.0, 35.1, 13.1]
@@ -494,13 +385,32 @@
         const scatterPoints = [
             { x: 42, y: 39.3, label: 'France Inter' },
             { x: 35, y: 35.1, label: 'France 2' },
-            { x: 33, y: 31.5, label: 'BFM TV' }, // Recul
-            { x: 30, y: 28.2, label: 'CNews' }, // Recul
+            { x: 33, y: 31.5, label: 'BFM TV' },
+            { x: 30, y: 28.2, label: 'CNews' },
             { x: 71, y: 70.3, label: 'Fip' },
             { x: 18, y: 17.5, label: 'RMC' }
         ];
 
-        // --- CHART 1: SCATTER (Evolution) ---
+        // --- CHART 1: VOLUME GLOBAL ---
+        new Chart(document.getElementById('volumeChart'), {
+            type: 'bar',
+            data: {
+                labels: volumeData.labels,
+                datasets: [
+                    { label: 'Femmes', data: volumeData.women, backgroundColor: C_WOMEN, borderRadius: 6 },
+                    { label: 'Hommes', data: volumeData.men, backgroundColor: C_MEN, borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    y: { title: {display:true, text:'Volume (Millions)'} },
+                    x: { grid: {display:false} }
+                }
+            }
+        });
+
+        // --- CHART 2: SCATTER (Evolution) ---
         new Chart(document.getElementById('scatterChart'), {
             type: 'scatter',
             data: {
@@ -510,24 +420,21 @@
                     backgroundColor: (ctx) => {
                         const v = ctx.raw;
                         if(!v) return C_WOMEN;
-                        return v.y < v.x - 1 ? C_NEG : C_POS; // Rouge si recul > 1%
+                        return v.y < v.x - 1 ? C_NEG : C_POS;
                     },
                     pointRadius: 8,
                     pointHoverRadius: 12
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 scales: {
                     x: { title: {display:true, text:'2019 (Pré-Covid) %'}, min: 10, max: 80 },
                     y: { title: {display:true, text:'2020 (Covid) %'}, min: 10, max: 80 }
                 },
                 plugins: {
                     legend: {display: false},
-                    tooltip: {
-                        callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% -> ${c.raw.y}%` }
-                    },
+                    tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% -> ${c.raw.y}%` } },
                     annotation: {
                         annotations: {
                             line1: {
@@ -542,7 +449,7 @@
             }
         });
 
-        // --- CHART 2: GENRE (Horizontal) ---
+        // --- CHART 3: GENRE (Horizontal) ---
         new Chart(document.getElementById('genreChart'), {
             type: 'bar',
             data: {
@@ -550,20 +457,18 @@
                 datasets: [{
                     data: genreData.data,
                     backgroundColor: genreData.data.map(v => v < 20 ? C_NEG : C_WOMEN),
-                    borderRadius: 4,
-                    barPercentage: 0.6
+                    borderRadius: 4
                 }]
             },
             options: {
                 indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
+                responsive: true, maintainAspectRatio: false,
                 scales: { x: { max: 50, grid: {display:false} }, y: { grid: {display:false} } },
                 plugins: { legend: {display:false} }
             }
         });
 
-        // --- CHART 3: INTERACTIVE CHANNELS ---
+        // --- CHART 4: INTERACTIVE CHANNELS ---
         let myChannelChart;
         function drawChannelChart(filter) {
             const ctx = document.getElementById('channelChart').getContext('2d');
@@ -584,24 +489,21 @@
                     }, {
                         label: 'Hommes',
                         data: d.map(x => 100 - x.data),
-                        backgroundColor: C_MEN,
-                        borderRadius: 4,
-                        hidden: true
+                        backgroundColor: C_MEN, // Utilisation du Bleu
+                        borderRadius: 4
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    responsive: true, maintainAspectRatio: false,
                     scales: {
-                        y: { max: 100 },
-                        x: { grid: {display:false} }
+                        y: { max: 100, stacked: true },
+                        x: { grid: {display:false}, stacked: true }
                     },
-                    plugins: { legend: {display:false} }
+                    plugins: { legend: {display:true} }
                 }
             });
         }
 
-        // Init Chart 3 & Listeners
         drawChannelChart('all');
         document.querySelectorAll('.btn-pill').forEach(btn => {
             btn.addEventListener('click', function() {
