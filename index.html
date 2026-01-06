@@ -155,14 +155,15 @@
             box-shadow: var(--shadow-sm); width: 220px; text-align: center;
             transition: transform 0.3s;
             border: 1px solid #e2e8f0;
+            text-decoration: none; color: inherit; display: block;
         }
         .team-card:hover { transform: translateY(-8px); }
-        .avatar-circle {
+        .avatar-img {
             width: 80px; height: 80px;
-            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-            color: var(--brand-color); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: 700; margin: 0 auto 1rem;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            margin: 0 auto 1rem;
         }
 
         footer {
@@ -248,7 +249,7 @@
                 </div>
                 <div class="insight-box">
                     <h4>Le constat</h4>
-                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Les données brutes (en secondes) ont été converties ici en heures pour plus de lisibilité. On parle bien de ~13 500 heures de parole féminine contre ~25 700 heures masculines détectées sur l'année.</p>
+                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Les données brutes (en secondes) ont été converties ici en heures pour plus de lisibilité : environ <strong>13,6k heures</strong> de parole féminine vs <strong>25,3k heures</strong> masculines sur l'année.</p>
                 </div>
             </div>
         </section>
@@ -266,7 +267,7 @@
                 <div class="insight-box">
                     <h4>Décryptage</h4>
                     <p>Ce graphique compare 2019 (axe X) à 2020 (axe Y). La ligne pointillée représente la stagnation. 
-                    <strong>Les points en dessous de la ligne (en rouge)</strong> montrent les chaînes où la parole des femmes a reculé pendant le confinement (BFM, CNews, France Inter). L'urgence a favorisé le recours à des experts masculins.</p>
+                    <strong>Les points en dessous de la ligne (en rouge)</strong> montrent les chaînes où la parole des femmes a reculé pendant le confinement (ex. Europe 1, France 2, CNEWS, RTL, NRJ, RMC Story). Le recours à des experts masculins a pesé sur ces rédactions.</p>
                 </div>
             </div>
         </section>
@@ -284,7 +285,7 @@
                     <div class="chart-wrapper" style="height: 300px;">
                         <canvas id="genreChart"></canvas>
                     </div>
-                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Le sport reste le mauvais élève (87% masculin), loin derrière la musique ou la fiction.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Les thématiques les plus équilibrées restent la musique (~44% de parole féminine) et certains magazines/infos. À l'opposé, le sport plafonne à ~13% (hors top 8 affiché ici).</p>
                 </div>
 
                 <div class="card">
@@ -309,29 +310,31 @@
             </div>
             
             <div class="team-container">
-                <div class="team-card">
-                    <div class="avatar-circle">VP</div>
+                <a class="team-card" href="https://github.com/Rateur" target="_blank" rel="noreferrer">
+                    <img class="avatar-img" src="https://unavatar.io/github/Rateur" alt="Valentin PERIES">
                     <h4>Valentin PERIES</h4>
                     <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Analyst</span>
-                </div>
-                <div class="team-card">
-                    <div class="avatar-circle">GG</div>
+                </a>
+                <a class="team-card" href="https://github.com/GautierGavat" target="_blank" rel="noreferrer" data-linkedin="TODO">
+                    <img class="avatar-img" src="https://avatars.githubusercontent.com/u/207581922?v=4" alt="Gautier Gavat">
                     <h4>Gautier Gavat</h4>
                     <span style="color: var(--text-secondary); font-size: 0.9rem;">Data Scientist</span>
-                </div>
-                <div class="team-card">
-                    <div class="avatar-circle">ST</div>
+                </a>
+                <a class="team-card" href="https://github.com/tousabry69-a11y" target="_blank" rel="noreferrer">
+                    <img class="avatar-img" src="https://unavatar.io/github/tousabry69-a11y" alt="Sabry Touam">
                     <h4>Sabry Touam</h4>
                     <span style="color: var(--text-secondary); font-size: 0.9rem;">Développeur Web</span>
-                </div>
+                </a>
             </div>
         </section>
 
     </div>
 
     <footer>
-        <p>Projet réalisé pour le défi <strong>Data.gouv.fr</strong></p>
-        <p style="font-size: 0.8rem; opacity: 0.7;">Données : INA & ARCOM (2010-2020) | Traitement : Python & Pandas</p>
+        <p>Projet réalisé pour le défi <a href="https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation" target="_blank" rel="noreferrer">Data.gouv.fr</a></p>
+        <p style="font-size: 0.9rem; opacity: 0.9; color: #e2e8f0;">
+            Données CSA/INA 2019-2020 : <a href="data/chaines.csv">chaînes</a> · <a href="data/genres_programmes.csv">genres</a> · Code : <a href="https://github.com/Rateur/opendata" target="_blank" rel="noreferrer">github.com/Rateur/opendata</a>
+        </p>
     </footer>
 
     <script>
@@ -357,140 +360,180 @@
         const C_NEG = '#ef4444';
         const C_POS = '#10b981';
 
-        // --- DATA ---
-        
-        // Données converties en Milliers d'heures (depuis secondes)
-        // 48.7M sec = 13 542 heures | 92.5M sec = 25 694 heures
-        const volumeData = {
-            labels: ['2019', '2020'],
-            women: [13.5, 13.6], 
-            men: [25.7, 25.4]
+        // --- DATA (chargée depuis data/*.csv pour nourrir les 4 graphiques) ---
+        const parseCSV = (text) => {
+            const lines = text.trim().split(/\r?\n/).filter(Boolean);
+            const headers = lines.shift().split(',');
+            return lines.map(line => {
+                const values = line.split(',');
+                return headers.reduce((acc, key, idx) => {
+                    const raw = (values[idx] ?? '').trim();
+                    if(raw === '') { acc[key] = null; return acc; }
+                    const num = Number(raw);
+                    acc[key] = Number.isFinite(num) ? num : raw;
+                    return acc;
+                }, {});
+            });
         };
 
-        const genreData = {
-            labels: ['Musique', 'Info JT', 'Magazine', 'Docu', 'Divert.', 'Sport'],
-            dataWomen: [44.0, 39.2, 39.0, 38.0, 35.1, 13.1],
-            // On calcule le reste pour les hommes
-            dataMen: [56.0, 60.8, 61.0, 62.0, 64.9, 86.9]
+        const sumField = (arr, field) => arr.reduce((s, row) => s + (Number(row[field]) || 0), 0);
+        const pct = (val) => Number((val * 100).toFixed(1));
+
+        // Volume global femmes/hommes (en milliers d'heures) pour 2019 vs 2020
+        const buildVolumeData = (chaines) => {
+            const women2019 = sumField(chaines, 'women_speech_duration_2019');
+            const women2020 = sumField(chaines, 'women_speech_duration_2020');
+            const men2019 = sumField(chaines, 'men_speech_duration_2019');
+            const men2020 = sumField(chaines, 'men_speech_duration_2020');
+            const toKHours = (v) => Number((v / 3600 / 1000).toFixed(1));
+            return {
+                labels: ['2019', '2020'],
+                women: [toKHours(women2019), toKHours(women2020)],
+                men: [toKHours(men2019), toKHours(men2020)]
+            };
         };
 
-        const channels = [
-            { label: 'Fip', data: 70.3, type: 'radio' },
-            { label: 'TFX', data: 46.4, type: 'tv' },
-            { label: 'France Culture', data: 39.8, type: 'radio' },
-            { label: 'France Inter', data: 39.3, type: 'radio' },
-            { label: 'TF1', data: 36.2, type: 'tv' },
-            { label: 'France 2', data: 35.1, type: 'tv' },
-            { label: 'BFM TV', data: 31.5, type: 'tv' },
-            { label: 'CNews', data: 28.2, type: 'tv' },
-            { label: 'RMC', data: 17.5, type: 'radio' },
-            { label: 'L\'Équipe', data: 15.2, type: 'tv' }
-        ].sort((a,b) => b.data - a.data);
+        // Top genres (8) par taux d'expression des femmes 2020
+        const buildGenreData = (genres) => {
+            const cleaned = genres
+                .filter(g => typeof g.women_expression_rate_2020 === 'number')
+                .sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0))
+                .slice(0, 8);
+            return {
+                labels: cleaned.map(g => g.genre),
+                women: cleaned.map(g => pct(g.women_expression_rate_2020 || 0)),
+                men: cleaned.map(g => 100 - pct(g.women_expression_rate_2020 || 0))
+            };
+        };
 
-        const scatterPoints = [
-            { x: 42, y: 39.3, label: 'France Inter' },
-            { x: 35, y: 35.1, label: 'France 2' },
-            { x: 33, y: 31.5, label: 'BFM TV' },
-            { x: 30, y: 28.2, label: 'CNews' },
-            { x: 71, y: 70.3, label: 'Fip' },
-            { x: 18, y: 17.5, label: 'RMC' }
-        ];
+        // Top éditeurs (12) pour le bar chart filtrable radio/TV
+        const buildChannelData = (chaines) => {
+            return chaines
+                .filter(r => typeof r.women_expression_rate_2020 === 'number')
+                .sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0))
+                .slice(0, 12)
+                .map(r => ({
+                    label: r.Editeur,
+                    type: (r.media || '').toLowerCase(),
+                    women: pct(r.women_expression_rate_2020 || 0)
+                }));
+        };
 
-        // --- CHART 1: VOLUME GLOBAL ---
-        new Chart(document.getElementById('volumeChart'), {
-            type: 'bar',
-            data: {
-                labels: volumeData.labels,
-                datasets: [
-                    { label: 'Femmes', data: volumeData.women, backgroundColor: C_WOMEN, borderRadius: 6 },
-                    { label: 'Hommes', data: volumeData.men, backgroundColor: C_MEN, borderRadius: 6 }
-                ]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: {
-                    y: { title: {display:true, text:'Volume (Milliers d\'heures)'} },
-                    x: { grid: {display:false} }
-                }
-            }
-        });
+        // Scatter : évolution 2019→2020 (top 20 par volume 2020, taille ∝ volume)
+        const buildScatterPoints = (chaines) => {
+            const withRates = chaines.filter(r => typeof r.women_expression_rate_2019 === 'number' && typeof r.women_expression_rate_2020 === 'number');
+            const ranked = withRates
+                .sort((a, b) => (b.total_declarations_duration_2020 || 0) - (a.total_declarations_duration_2020 || 0))
+                .slice(0, 20);
+            const maxVol = Math.max(...ranked.map(r => r.total_declarations_duration_2020 || 0), 1);
+            return ranked.map(r => ({
+                x: pct(r.women_expression_rate_2019 || 0),
+                y: pct(r.women_expression_rate_2020 || 0),
+                label: r.Editeur,
+                media: (r.media || '').toLowerCase(),
+                radius: 6 + 6 * ((r.total_declarations_duration_2020 || 0) / maxVol)
+            }));
+        };
 
-        // --- CHART 2: SCATTER (Evolution) ---
-        new Chart(document.getElementById('scatterChart'), {
-            type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Chaînes',
-                    data: scatterPoints,
-                    backgroundColor: (ctx) => {
-                        const v = ctx.raw;
-                        if(!v) return C_WOMEN;
-                        return v.y < v.x - 1 ? C_NEG : C_POS;
-                    },
-                    pointRadius: 8,
-                    pointHoverRadius: 12
-                }]
-            },
-            options: {
-                responsive: true, maintainAspectRatio: false,
-                scales: {
-                    x: { title: {display:true, text:'2019 (Pré-Covid) %'}, min: 10, max: 80 },
-                    y: { title: {display:true, text:'2020 (Covid) %'}, min: 10, max: 80 }
+        const renderVolumeChart = (volumeData) => {
+            new Chart(document.getElementById('volumeChart'), {
+                type: 'bar',
+                data: {
+                    labels: volumeData.labels,
+                    datasets: [
+                        { label: 'Femmes', data: volumeData.women, backgroundColor: C_WOMEN, borderRadius: 6 },
+                        { label: 'Hommes', data: volumeData.men, backgroundColor: C_MEN, borderRadius: 6 }
+                    ]
                 },
-                plugins: {
-                    legend: {display: false},
-                    tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% -> ${c.raw.y}%` } },
-                    annotation: {
-                        annotations: {
-                            line1: {
-                                type: 'line',
-                                xMin: 10, xMax: 80, yMin: 10, yMax: 80,
-                                borderColor: '#cbd5e1', borderWidth: 2, borderDash: [5,5],
-                                label: { enabled: true, content: 'Stagnation', position: 'end', color: '#94a3b8', backgroundColor:'transparent' }
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { title: {display:true, text:'Volume (milliers d\'heures de parole)'}, beginAtZero: true },
+                        x: { grid: {display:false} }
+                    }
+                }
+            });
+        };
+
+        const renderScatterChart = (scatterPoints) => {
+            new Chart(document.getElementById('scatterChart'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Chaînes',
+                        data: scatterPoints,
+                        backgroundColor: (ctx) => {
+                            const v = ctx.raw;
+                            if(!v) return C_WOMEN;
+                            return v.y < v.x ? C_NEG : C_POS;
+                        },
+                        pointRadius: (ctx) => ctx.raw?.radius || 8,
+                        pointHoverRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        x: { title: {display:true, text:'2019 (Pré-Covid) %'}, min: 0, max: 80 },
+                        y: { title: {display:true, text:'2020 (Covid) %'}, min: 0, max: 80 }
+                    },
+                    plugins: {
+                        legend: {display: false},
+                        tooltip: { callbacks: { label: (c) => `${c.raw.label}: ${c.raw.x}% → ${c.raw.y}%` } },
+                        annotation: {
+                            annotations: {
+                                line1: {
+                                    type: 'line',
+                                    xMin: 0, xMax: 80, yMin: 0, yMax: 80,
+                                    borderColor: '#cbd5e1', borderWidth: 2, borderDash: [5,5],
+                                    label: { enabled: true, content: 'Stagnation', position: 'end', color: '#94a3b8', backgroundColor:'transparent' }
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        };
 
-        // --- CHART 3: GENRE (Horizontal - Stacked) ---
-        new Chart(document.getElementById('genreChart'), {
-            type: 'bar',
-            data: {
-                labels: genreData.labels,
-                datasets: [
-                    {
-                        label: 'Femmes',
-                        data: genreData.dataWomen,
-                        backgroundColor: C_WOMEN,
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Hommes',
-                        data: genreData.dataMen,
-                        backgroundColor: C_MEN,
-                        borderRadius: 4
-                    }
-                ]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true, maintainAspectRatio: false,
-                scales: { 
-                    x: { max: 100, stacked: true, grid: {display:false} }, 
-                    y: { stacked: true, grid: {display:false} } 
+        const renderGenreChart = (genreData) => {
+            new Chart(document.getElementById('genreChart'), {
+                type: 'bar',
+                data: {
+                    labels: genreData.labels,
+                    datasets: [
+                        {
+                            label: 'Femmes',
+                            data: genreData.women,
+                            backgroundColor: C_WOMEN,
+                            borderRadius: 4
+                        },
+                        {
+                            label: 'Hommes',
+                            data: genreData.men,
+                            backgroundColor: C_MEN,
+                            borderRadius: 4
+                        }
+                    ]
                 },
-                plugins: { legend: {display:true} }
-            }
-        });
+                options: {
+                    indexAxis: 'y',
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { 
+                        x: { max: 100, stacked: true, grid: {display:false} }, 
+                        y: { stacked: true, grid: {display:false} } 
+                    },
+                    plugins: { legend: {display:true} }
+                }
+            });
+        };
 
-        // --- CHART 4: INTERACTIVE CHANNELS ---
+        // --- CHART 4: INTERACTIVE CHANNELS (alimenté par le CSV) ---
         let myChannelChart;
+        let channelData = [];
         function drawChannelChart(filter) {
             const ctx = document.getElementById('channelChart').getContext('2d');
-            let d = channels;
-            if(filter !== 'all') d = channels.filter(x => x.type === filter);
+            let d = channelData;
+            if(filter !== 'all') d = channelData.filter(x => x.type === filter);
 
             if(myChannelChart) myChannelChart.destroy();
 
@@ -500,12 +543,12 @@
                     labels: d.map(x => x.label),
                     datasets: [{
                         label: 'Femmes',
-                        data: d.map(x => x.data),
+                        data: d.map(x => x.women),
                         backgroundColor: C_WOMEN,
                         borderRadius: 4
                     }, {
                         label: 'Hommes',
-                        data: d.map(x => 100 - x.data),
+                        data: d.map(x => 100 - x.women),
                         backgroundColor: C_MEN,
                         borderRadius: 4
                     }]
@@ -521,14 +564,39 @@
             });
         }
 
-        drawChannelChart('all');
-        document.querySelectorAll('.btn-pill').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                drawChannelChart(this.dataset.type);
-            });
-        });
+        // Charge les CSV et déclenche le rendu de tous les graphiques
+        const loadAndRender = async () => {
+            try {
+                const [chainesText, genresText] = await Promise.all([
+                    fetch('data/chaines.csv').then(r => r.text()),
+                    fetch('data/genres_programmes.csv').then(r => r.text())
+                ]);
+                const chaines = parseCSV(chainesText);
+                const genres = parseCSV(genresText);
+
+                const volumeData = buildVolumeData(chaines);
+                const genreData = buildGenreData(genres);
+                const scatterPoints = buildScatterPoints(chaines);
+                channelData = buildChannelData(chaines);
+
+                renderVolumeChart(volumeData);
+                renderScatterChart(scatterPoints);
+                renderGenreChart(genreData);
+                drawChannelChart('all');
+
+                document.querySelectorAll('.btn-pill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.btn-pill').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        drawChannelChart(this.dataset.type);
+                    });
+                });
+            } catch (err) {
+                console.error('Erreur de chargement des données', err);
+            }
+        };
+
+        loadAndRender();
 
     </script>
 </body>
