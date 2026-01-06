@@ -97,5 +97,5 @@
 ```
 
 ## Hebergement
-- Page statique hebergee sur Netlify : https://tourmaline-valkyrie-1c3a7e.netlify.app
+- Page statique hebergee sur Netlify : https://opendata2025.netlify.app
 - Les graphiques consomment directement les CSV du dossier `data/` (charges cote client).
