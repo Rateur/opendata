@@ -16,14 +16,14 @@
             --text-primary: #0f172a;
             --text-secondary: #64748b;
             
-            --brand-color: #3b82f6; /* Bleu Principal */
+            --brand-color: #3b82f6; 
             
-            /* Couleurs Data (Contraste Fort) */
+            /* Couleurs Data */
             --color-women: #ff6b6b;   /* Corail (Femmes) */
-            --color-men: #3b82f6;     /* Bleu Roi (Hommes) - NOUVEAU */
+            --color-men: #3b82f6;     /* Bleu Roi (Hommes) */
             
-            --color-pos: #10b981;     /* Vert (Progression) */
-            --color-neg: #ef4444;     /* Rouge (Recul) */
+            --color-pos: #10b981;
+            --color-neg: #ef4444;
 
             --radius: 16px;
             --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -240,7 +240,7 @@
         <section id="global" class="reveal">
             <div class="section-header">
                 <h2>Le Grand Écart : Volume Global</h2>
-                <p>Comparaison de la masse totale de temps de parole (en millions d'heures)</p>
+                <p>Comparaison de la masse totale de temps de parole (en milliers d'heures)</p>
             </div>
             <div class="card">
                 <div class="chart-wrapper" style="height: 350px;">
@@ -248,7 +248,7 @@
                 </div>
                 <div class="insight-box">
                     <h4>Le constat</h4>
-                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Si l'on cumule toutes les heures de tous les programmes, la domination masculine reste écrasante.</p>
+                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Les données brutes (en secondes) ont été converties ici en heures pour plus de lisibilité. On parle bien de ~13 500 heures de parole féminine contre ~25 700 heures masculines détectées sur l'année.</p>
                 </div>
             </div>
         </section>
@@ -280,11 +280,11 @@
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 2rem;">
                 
                 <div class="card">
-                    <h3>Par Thématique</h3>
+                    <h3>Par Thématique (H/F)</h3>
                     <div class="chart-wrapper" style="height: 300px;">
                         <canvas id="genreChart"></canvas>
                     </div>
-                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Le sport reste le mauvais élève (13%), loin derrière la musique ou la fiction.</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem; color: var(--text-secondary);">Le sport reste le mauvais élève (87% masculin), loin derrière la musique ou la fiction.</p>
                 </div>
 
                 <div class="card">
@@ -351,22 +351,27 @@
         Chart.defaults.color = '#64748b';
         Chart.defaults.scale.grid.color = '#f1f5f9';
         
-        // NOUVELLE PALETTE
-        const C_WOMEN = '#ff6b6b'; // Corail
-        const C_MEN = '#3b82f6';   // Bleu Roi (remplace le gris)
+        // COULEURS
+        const C_WOMEN = '#ff6b6b'; 
+        const C_MEN = '#3b82f6';   
         const C_NEG = '#ef4444';
         const C_POS = '#10b981';
 
         // --- DATA ---
+        
+        // Données converties en Milliers d'heures (depuis secondes)
+        // 48.7M sec = 13 542 heures | 92.5M sec = 25 694 heures
         const volumeData = {
             labels: ['2019', '2020'],
-            women: [48.7, 48.9],
-            men: [92.5, 91.3]
+            women: [13.5, 13.6], 
+            men: [25.7, 25.4]
         };
 
         const genreData = {
             labels: ['Musique', 'Info JT', 'Magazine', 'Docu', 'Divert.', 'Sport'],
-            data: [44.0, 39.2, 39.0, 38.0, 35.1, 13.1]
+            dataWomen: [44.0, 39.2, 39.0, 38.0, 35.1, 13.1],
+            // On calcule le reste pour les hommes
+            dataMen: [56.0, 60.8, 61.0, 62.0, 64.9, 86.9]
         };
 
         const channels = [
@@ -404,7 +409,7 @@
             options: {
                 responsive: true, maintainAspectRatio: false,
                 scales: {
-                    y: { title: {display:true, text:'Volume (Millions)'} },
+                    y: { title: {display:true, text:'Volume (Milliers d\'heures)'} },
                     x: { grid: {display:false} }
                 }
             }
@@ -449,22 +454,34 @@
             }
         });
 
-        // --- CHART 3: GENRE (Horizontal) ---
+        // --- CHART 3: GENRE (Horizontal - Stacked) ---
         new Chart(document.getElementById('genreChart'), {
             type: 'bar',
             data: {
                 labels: genreData.labels,
-                datasets: [{
-                    data: genreData.data,
-                    backgroundColor: genreData.data.map(v => v < 20 ? C_NEG : C_WOMEN),
-                    borderRadius: 4
-                }]
+                datasets: [
+                    {
+                        label: 'Femmes',
+                        data: genreData.dataWomen,
+                        backgroundColor: C_WOMEN,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Hommes',
+                        data: genreData.dataMen,
+                        backgroundColor: C_MEN,
+                        borderRadius: 4
+                    }
+                ]
             },
             options: {
                 indexAxis: 'y',
                 responsive: true, maintainAspectRatio: false,
-                scales: { x: { max: 50, grid: {display:false} }, y: { grid: {display:false} } },
-                plugins: { legend: {display:false} }
+                scales: { 
+                    x: { max: 100, stacked: true, grid: {display:false} }, 
+                    y: { stacked: true, grid: {display:false} } 
+                },
+                plugins: { legend: {display:true} }
             }
         });
 
@@ -489,7 +506,7 @@
                     }, {
                         label: 'Hommes',
                         data: d.map(x => 100 - x.data),
-                        backgroundColor: C_MEN, // Utilisation du Bleu
+                        backgroundColor: C_MEN,
                         borderRadius: 4
                     }]
                 },
