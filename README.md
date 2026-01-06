@@ -51,11 +51,6 @@
   </table>
 </div>
 
-Profils GitHub :
-- Valentin PERIES : https://github.com/Rateur
-- Sabry Touam : https://github.com/tousabry69-a11y
-- Gautier Gavat : https://github.com/GautierGavat
-
 ## Ressources
 - Defi data.gouv.fr : https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation
 - Jeux CSA/INA 2019-2020 sur la parite de la parole : chaines et genres de programmes.
@@ -71,9 +66,11 @@ Profils GitHub :
 .
 |-- README.md
 |-- index.html
+|-- .gitignore
 |-- data/
 |   |-- chaines.csv
 |   `-- genres_programmes.csv
 `-- notebooks/
-    `-- parite_medias_eda.ipynb
+    |-- parite_medias_eda.ipynb
+    `-- EDA.ipynb
 ```
