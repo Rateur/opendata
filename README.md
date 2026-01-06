@@ -1,15 +1,36 @@
 <div align="center">
   <h1>Open Data</h1>
   <p>
-    <a href="https://github.com/Rateur/opendata">
+    <a href="https://github.com/Rateur/opendata/stargazers">
       <img src="https://img.shields.io/github/stars/Rateur/opendata?style=for-the-badge&color=ffb300&logo=github&label=Stars" alt="GitHub Stars">
     </a>
     <a href="https://www.python.org/">
-      <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+      <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11">
+    </a>
+    <a href="https://pandas.pydata.org/">
+      <img src="https://img.shields.io/badge/Pandas-Dataframe-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
+    </a>
+    <a href="https://jupyter.org/">
+      <img src="https://img.shields.io/badge/Jupyter-Lab-F37626?style=for-the-badge&logo=jupyter&logoColor=white" alt="Jupyter Lab">
     </a>
     <a href="https://www.chartjs.org/">
       <img src="https://img.shields.io/badge/Chart.js-FF6384?style=for-the-badge&logo=chartdotjs&logoColor=white" alt="Chart.js">
     </a>
+    <a href="https://www.netlify.com/">
+      <img src="https://img.shields.io/badge/Netlify-00AD9F?style=for-the-badge&logo=netlify&logoColor=white" alt="Netlify">
+    </a>
+  </p>
+</div>
+
+<div align="center">
+  <p style="margin: 10px 0 20px; font-weight: 600;">
+    <a href="#contexte">Contexte</a> •
+    <a href="#sujet">Sujet</a> •
+    <a href="#equipe">Équipe</a> •
+    <a href="#ressources">Ressources</a> •
+    <a href="#donnees-disponibles">Données</a> •
+    <a href="#squelette-du-depot">Squelette</a> •
+    <a href="#hebergement">Hébergement</a>
   </p>
 </div>
 
