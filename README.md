@@ -36,7 +36,7 @@
 
 ## Contexte
 - Defi data.gouv.fr : « Les Francaises et Francais face a l'information » (enjeux de confiance, usages et pratiques).
-- Donnees ouvertes traitees en local (pas de dependance cloud) : premiers jeux CSA/INA 2019-2020 sur la parite de la parole, nettoyes en CSV.
+- Donnees ouvertes traitees en local (pas de dependance cloud) : premiers jeux <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parite de la parole, nettoyes en CSV.
 - Objectif court terme : cadrer les sources, fixer les hypotheses et poser le cadre d'analyse avant d'alimenter le site statique et les premiers notebooks.
 
 ## Sujet
@@ -74,7 +74,7 @@
 
 ## Ressources
 - Defi data.gouv.fr : https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation
-- Jeux CSA/INA 2019-2020 sur la parite de la parole : chaines et genres de programmes.
+- Jeux <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parite de la parole : chaines et genres de programmes.
 
 ## Donnees disponibles
 - `data/chaines.csv` : indicateurs par media/editeur/groupe (volume et taux d'expression femmes/hommes/autres, 2019-2020).
