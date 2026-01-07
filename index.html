@@ -70,6 +70,7 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 700; font-size: 1.3rem;
             color: var(--text-primary); display: flex; align-items: center; gap: 8px;
+            text-decoration: none;
         }
         .brand span { color: var(--brand-color); }
 
@@ -214,10 +215,10 @@
         }
     </style>
 </head>
-<body>
+<body id="top">
 
     <nav>
-        <div class="brand">OpenData<span>University</span></div>
+        <a class="brand" href="#top">OpenData<span>University</span></a>
         <button class="nav-toggle" aria-expanded="false" aria-label="Ouvrir ou fermer le menu">Menu</button>
         <div class="nav-links">
             <a href="#contexte">Le Projet</a>
@@ -231,7 +232,7 @@
     <header class="reveal">
         <div class="container">
             <h1>Les Français face à <br><span>l'Information</span></h1>
-            <p class="subtitle">Comment la crise sanitaire de 2020 a figé la parole des femmes dans les médias audiovisuels.</p>
+            <p class="subtitle">Observatoire de la Parité Médiatique</p>
         </div>
     </header>
 
@@ -369,6 +370,9 @@
         <p>Projet réalisé pour le défi <a href="https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation" target="_blank" rel="noreferrer">Data.gouv.fr</a></p>
         <p style="font-size: 0.9rem; opacity: 0.9; color: #e2e8f0;">
             <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4" target="_blank" rel="noreferrer">Données CSA/INA 2019-2020</a> : <a href="data/chaines.csv">chaînes</a> · <a href="data/genres_programmes.csv">genres</a> · Code : <a href="https://github.com/Rateur/opendata" target="_blank" rel="noreferrer">github.com/Rateur/opendata</a>
+        </p>
+        <p style="font-size: 0.9rem; opacity: 0.9; color: #e2e8f0;">
+            Réutilisation data.gouv.fr : <a href="https://www.data.gouv.fr/reuses/observatoire-de-la-parite-mediatique" target="_blank" rel="noreferrer">Observatoire de la Parité Médiatique</a>
         </p>
     </footer>
 
