@@ -4,6 +4,9 @@
     <a href="https://github.com/Rateur/opendata/stargazers">
       <img src="https://img.shields.io/github/stars/Rateur/opendata?style=for-the-badge&color=ffb300&logo=github&label=Stars" alt="GitHub Stars">
     </a>
+    <a href="https://www.data.gouv.fr/reuses/observatoire-de-la-parite-mediatique">
+      <img src="https://img.shields.io/badge/data.gouv.fr-R%C3%A9utilisation-0b7cff?style=for-the-badge" alt="Réutilisation data.gouv.fr">
+    </a>
     <a href="https://www.python.org/">
       <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11">
     </a>
@@ -28,6 +31,7 @@
     <a href="#sujet">Sujet</a> •
     <a href="#equipe">Équipe</a> •
     <a href="#ressources">Ressources</a> •
+    <a href="#reutilisation">Reutilisation</a> •
     <a href="#donnees-disponibles">Données</a> •
     <a href="#squelette-du-depot">Squelette</a> •
     <a href="#hebergement">Hébergement</a>
@@ -75,6 +79,9 @@
 ## Ressources
 - Defi data.gouv.fr : https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation
 - Jeux <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parite de la parole : chaines et genres de programmes.
+
+## Reutilisation
+- <a href="https://www.data.gouv.fr/reuses/observatoire-de-la-parite-mediatique">Observatoire de la Parite Mediatique</a> (data.gouv.fr)
 
 ## Donnees disponibles
 - `data/chaines.csv` : indicateurs par media/editeur/groupe (volume et taux d'expression femmes/hommes/autres, 2019-2020).
