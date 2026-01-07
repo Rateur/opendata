@@ -284,7 +284,7 @@
                 </div>
                 <div class="insight-box">
                     <h4>Le constat</h4>
-                    <p>En volume absolu, les hommes parlent presque <strong>2 fois plus</strong> que les femmes. Les données brutes (en secondes) ont été converties ici en heures pour plus de lisibilité : environ <strong>13,6k heures</strong> de parole féminine vs <strong>25,3k heures</strong> masculines sur l'année.</p>
+                    <p>En volume absolu, les hommes parlent environ <strong><span id="text-volume-ratio">—</span></strong> plus que les femmes. Les données brutes (en secondes) ont été converties ici en heures pour plus de lisibilité : environ <strong><span id="text-hours-women">—</span></strong> de parole féminine vs <strong><span id="text-hours-men">—</span></strong> masculines en 2020.</p>
                 </div>
             </div>
         </section>
@@ -437,9 +437,30 @@
             const suffix = hours >= 1000 ? 'k heures' : 'heures';
             return `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} ${suffix}`;
         };
+        const formatKHoursCompact = (hours) => {
+            if (!Number.isFinite(hours)) return '—';
+            if (hours < 1000) {
+                return `${hours.toLocaleString('fr-FR', { maximumFractionDigits: 0 })} heures`;
+            }
+            const value = hours / 1000;
+            return `${value.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}k heures`;
+        };
         const formatRatioFR = (val) => {
             if (!Number.isFinite(val)) return '—';
             return `${val.toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 })}×`;
+        };
+
+        const womenRateOnlyPair = (row, year) => {
+            const women = Number(row[`women_speech_duration_${year}`]) || 0;
+            const men = Number(row[`men_speech_duration_${year}`]) || 0;
+            const total = women + men;
+            if (!total) return null;
+            return women / total;
+        };
+        const pairVolume = (row, year) => {
+            const women = Number(row[`women_speech_duration_${year}`]) || 0;
+            const men = Number(row[`men_speech_duration_${year}`]) || 0;
+            return women + men;
         };
 
         // Volume global femmes/hommes (en milliers d'heures) pour 2019 vs 2020
@@ -459,9 +480,13 @@
         // Top genres (8) par taux d'expression des femmes 2020
         const buildGenreData = (genres) => {
             const valid = genres
-                .filter(g => typeof g.women_expression_rate_2020 === 'number');
+                .map(g => {
+                    const rate = womenRateOnlyPair(g, '2020');
+                    return { ...g, womenRate2020: rate };
+                })
+                .filter(g => typeof g.womenRate2020 === 'number');
 
-            const sorted = [...valid].sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0));
+            const sorted = [...valid].sort((a, b) => (b.womenRate2020 || 0) - (a.womenRate2020 || 0));
             let top = sorted.slice(0, 8);
 
             // Forcer l'inclusion du sport (comparaison) même s'il est hors top 8
@@ -473,37 +498,48 @@
 
             return {
                 labels: top.map(g => g.genre),
-                women: top.map(g => pct(g.women_expression_rate_2020 || 0)),
-                men: top.map(g => 100 - pct(g.women_expression_rate_2020 || 0))
+                women: top.map(g => pct(g.womenRate2020 || 0)),
+                men: top.map(g => 100 - pct(g.womenRate2020 || 0))
             };
         };
 
         // Top éditeurs (12) pour le bar chart filtrable radio/TV
         const buildChannelData = (chaines) => {
             return chaines
-                .filter(r => typeof r.women_expression_rate_2020 === 'number')
-                .sort((a, b) => (b.women_expression_rate_2020 || 0) - (a.women_expression_rate_2020 || 0))
+                .map(r => {
+                    const rate = womenRateOnlyPair(r, '2020');
+                    return { ...r, womenRate2020: rate };
+                })
+                .filter(r => typeof r.womenRate2020 === 'number')
+                .sort((a, b) => (b.womenRate2020 || 0) - (a.womenRate2020 || 0))
                 .slice(0, 12)
                 .map(r => ({
                     label: r.Editeur,
                     type: (r.media || '').toLowerCase(),
-                    women: pct(r.women_expression_rate_2020 || 0)
+                    women: pct(r.womenRate2020 || 0)
                 }));
         };
 
         // Scatter : évolution 2019→2020 (top 20 par volume 2020, taille ∝ volume)
         const buildScatterPoints = (chaines) => {
-            const withRates = chaines.filter(r => typeof r.women_expression_rate_2019 === 'number' && typeof r.women_expression_rate_2020 === 'number');
+            const withRates = chaines
+                .map(r => {
+                    const rate19 = womenRateOnlyPair(r, '2019');
+                    const rate20 = womenRateOnlyPair(r, '2020');
+                    const vol20 = pairVolume(r, '2020');
+                    return { ...r, rate19, rate20, vol20 };
+                })
+                .filter(r => typeof r.rate19 === 'number' && typeof r.rate20 === 'number');
             const ranked = withRates
-                .sort((a, b) => (b.total_declarations_duration_2020 || 0) - (a.total_declarations_duration_2020 || 0))
+                .sort((a, b) => (b.vol20 || 0) - (a.vol20 || 0))
                 .slice(0, 20);
-            const maxVol = Math.max(...ranked.map(r => r.total_declarations_duration_2020 || 0), 1);
+            const maxVol = Math.max(...ranked.map(r => r.vol20 || 0), 1);
             return ranked.map(r => ({
-                x: pct(r.women_expression_rate_2019 || 0),
-                y: pct(r.women_expression_rate_2020 || 0),
+                x: pct(r.rate19 || 0),
+                y: pct(r.rate20 || 0),
                 label: r.Editeur,
                 media: (r.media || '').toLowerCase(),
-                radius: 6 + 6 * ((r.total_declarations_duration_2020 || 0) / maxVol)
+                radius: 6 + 6 * ((r.vol20 || 0) / maxVol)
             }));
         };
 
@@ -654,6 +690,11 @@
                 setText('kpi-women-rate', formatPercentFR(womenRate));
                 const ratioHM = womenSpeech ? (menSpeech / womenSpeech) : null;
                 setText('kpi-ratio', formatRatioFR(ratioHM));
+                const womenHours2020 = womenSpeech / 3600;
+                const menHours2020 = menSpeech / 3600;
+                setText('text-volume-ratio', formatRatioFR(ratioHM));
+                setText('text-hours-women', formatKHoursCompact(womenHours2020));
+                setText('text-hours-men', formatKHoursCompact(menHours2020));
 
                 const sportRow = genres.find(g => (g.genre || '').toLowerCase().includes('sport'));
                 const sportRate = sportRow?.women_expression_rate_2020;
