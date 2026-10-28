@@ -1,5 +1,6 @@
 <div align="center">
   <h1>Open Data</h1>
+  <p>Observatoire de la parité médiatique : <a href="https://opendata2025.netlify.app/">opendata2025.netlify.app</a></p>
   <p>
     <a href="https://github.com/Rateur/opendata/stargazers">
       <img src="https://img.shields.io/github/stars/Rateur/opendata?style=for-the-badge&color=ffb300&logo=github&label=Stars" alt="GitHub Stars">
@@ -8,7 +9,7 @@
       <img src="https://img.shields.io/badge/data.gouv.fr-R%C3%A9utilisation-0b7cff?style=for-the-badge" alt="Réutilisation data.gouv.fr">
     </a>
     <a href="https://www.python.org/">
-      <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.11">
+      <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.13">
     </a>
     <a href="https://pandas.pydata.org/">
       <img src="https://img.shields.io/badge/Pandas-Dataframe-150458?style=for-the-badge&logo=pandas&logoColor=white" alt="Pandas">
@@ -27,34 +28,122 @@
 
 <div align="center">
   <p style="margin: 10px 0 20px; font-weight: 600;">
-    <a href="#contexte">Contexte</a> •
-    <a href="#sujet">Sujet</a> •
-    <a href="#equipe">Équipe</a> •
-    <a href="#ressources">Ressources</a> •
-    <a href="#reutilisation">Reutilisation</a> •
-    <a href="#donnees-disponibles">Données</a> •
-    <a href="#squelette-du-depot">Squelette</a> •
-    <a href="#hebergement">Hébergement</a>
+    <a href="#ce-que-cest">Ce que c'est</a> •
+    <a href="#ce-que-le-site-montre">Ce que le site montre</a> •
+    <a href="#comment-cest-fait">Comment c'est fait</a> •
+    <a href="#lancer-en-local">Lancer en local</a> •
+    <a href="#état-et-limites">État et limites</a> •
+    <a href="#équipe">Équipe</a>
   </p>
 </div>
 
-## Contexte
-- Defi data.gouv.fr : « Les Francaises et Francais face a l'information » (enjeux de confiance, usages et pratiques).
-- Donnees ouvertes traitees en local (pas de dependance cloud) : premiers jeux <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parite de la parole, nettoyes en CSV.
-- Objectif court terme : cadrer les sources, fixer les hypotheses et poser le cadre d'analyse avant d'alimenter le site statique et les premiers notebooks.
+## Ce que c'est
+Une page web qui compare le temps de parole des femmes et des hommes à la télévision et à la radio françaises, en 2019 et en 2020.
 
-## Sujet
-- Questions guide : comment les publics consultent, trient et jugent l'information numerique et media.
-- Sorties visees : analyses reproductibles (notebooks), visualisations claires et synthese courte.
-- Principe : priorite a la transparence (scripts versionnes) et a la lecture rapide des resultats.
+Elle a été réalisée en janvier 2026 pour le défi data.gouv.fr « Les Françaises et Français face à l'information ». Tout tourne dans le navigateur : pas de serveur, pas de base de données.
 
-## Equipe
+- Site : https://opendata2025.netlify.app/
+- Défi : <a href="https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation">Les Françaises et Français face à l'information</a>
+- Données : <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parité de la parole, deux fichiers CSV (chaînes, genres de programmes)
+- Réutilisation déclarée : <a href="https://www.data.gouv.fr/reuses/observatoire-de-la-parite-mediatique">Observatoire de la Parité Médiatique</a> sur data.gouv.fr
+
+## Ce que le site montre
+Quatre chiffres clés, calculés à l'ouverture de la page à partir des CSV :
+- taux de parole des femmes en 2020 ;
+- taux dans le sport en 2020 ;
+- heures analysées en 2020 ;
+- rapport entre parole des hommes et des femmes.
+
+Quatre graphiques (Chart.js) :
+- **Volume global** : heures de parole des femmes et des hommes, 2019 contre 2020.
+- **Évolution par chaîne** : taux 2019 en abscisse, taux 2020 en ordonnée, pour les 20 chaînes au plus gros volume en 2020. Un point rouge est sous la diagonale (taux en baisse).
+- **Genres de programmes** : les 8 genres au taux de femmes le plus élevé, plus le sport s'il n'en fait pas partie.
+- **Comparatif hommes / femmes** : les 12 éditeurs au taux le plus élevé en 2020, avec un filtre Tout / Radio / TV.
+
+### Un résultat, vérifiable dans les données
+En 2020, 33 des 35 chaînes ont un taux d'expression des femmes inférieur à 50 %. Colonne utilisée : `women_expression_rate_2020` dans `data/chaines.csv`.
+
+- Les deux exceptions : Fip (70,4 %) et France 4 (60,0 %). Pour Fip, la parole identifiée ne couvre que 4,2 % de la durée analysée (`speech_rate_2020`), soit environ 61 heures.
+- La chaîne la plus proche de 50 % parmi les autres : 6TER (48,0 %). La plus basse : L'Equipe (13,0 %).
+- Par genre (`data/genres_programmes.csv`, même colonne) : sport 13,1 %, musique 44,0 %.
+
+## Comment c'est fait
+- **Une seule page** : `index.html`, en HTML, CSS et JavaScript, sans framework ni étape de build.
+- **Chargement des données** : `fetch` sur `data/chaines.csv` et `data/genres_programmes.csv`, lecture du CSV par une petite fonction (`parseCSV`), calculs dans le navigateur.
+- **Services externes** : Chart.js et chartjs-plugin-annotation 1.0.2 (jsDelivr), polices Poppins et Roboto (Google Fonts), avatars de l'équipe (unavatar.io). La page a besoin d'une connexion pour les afficher.
+- **Hébergement** : Netlify.
+
+### Les données
+Chaque ligne de `chaines.csv` (40 lignes) est une chaîne ; chaque ligne de `genres_programmes.csv` (13 lignes) est un genre de programme. Pour 2019 et 2020 :
+- `total_declarations_duration_*` : durée analysée ;
+- `women_speech_duration_*`, `men_speech_duration_*` : durée de parole des femmes et des hommes ;
+- `other_duration_*` : le reste de la durée (total moins femmes moins hommes) ;
+- `women_expression_rate_*` : femmes / (femmes + hommes) ;
+- `speech_rate_*` : (femmes + hommes) / durée totale.
+
+Les durées sont lues en secondes : `index.html` et `EDA.ipynb` les divisent par 3 600 pour obtenir des heures.
+
+### Les notebooks
+- `notebooks/parite_medias_eda.ipynb` : exploration avec pandas, seaborn et matplotlib. Volumes 2019 et 2020, groupes audiovisuels, radio contre TV, genres, volume contre taux. Lit `../data/`.
+- `notebooks/EDA.ipynb` : analyse plus poussée. Violons radio / TV, genres, régression linéaire (scikit-learn) sur 2019 et 2020, statut par chaîne. Lit deux fichiers `ina-csa-parole-femmes-*.csv` placés dans un dossier Téléchargements local (voir Limites).
+
+### Squelette du dépôt
+```
+.
+|-- README.md
+|-- index.html
+|-- .gitignore
+|-- data/
+|   |-- chaines.csv
+|   `-- genres_programmes.csv
+`-- notebooks/
+    |-- parite_medias_eda.ipynb
+    `-- EDA.ipynb
+```
+
+## Lancer en local
+### Le site
+La page charge les CSV avec `fetch` : ouvrez-la depuis un serveur local, pas en double-cliquant sur le fichier.
+
+```bash
+git clone https://github.com/Rateur/opendata.git
+cd opendata
+python -m http.server 8000
+```
+
+Puis http://localhost:8000.
+
+### Les notebooks
+Pas de fichier `requirements.txt` dans le dépôt. Les imports des notebooks demandent :
+
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn jupyterlab
+cd notebooks
+jupyter lab
+```
+
+Les deux notebooks ont été exécutés avec Python 3.13.5 (métadonnées des notebooks). Versions des bibliothèques : À confirmer.
+
+`EDA.ipynb` lit des chemins Windows écrits en dur (`C:\Users\Utilisateur\Downloads\...`). Remplacez-les par `../data/chaines.csv` et `../data/genres_programmes.csv` pour le relancer.
+
+## État et limites
+Le site est en ligne. Les données sont des CSV versionnés : rien ne les met à jour. Le dépôt n'a ni tests, ni intégration continue, ni fichier de licence (licence : À confirmer).
+
+Ce que les données ne permettent pas :
+- **Deux années seulement.** 2019 et 2020 ne font pas une tendance. La droite de `EDA.ipynb` est ajustée sur ces deux points.
+- **Couverture inégale.** `chaines.csv` compte 40 lignes : 35 ont des données 2020, 37 des données 2019, 32 les deux. Les totaux 2019 et 2020 (graphique de volume, projection du notebook) additionnent donc des chaînes différentes.
+- **Durée analysée instable.** Une même chaîne change de volume d'une année à l'autre. BFMTV : 3 095 h en 2019, 1 381 h en 2020. France 4 : 141 h puis 796 h, et son taux passe de 23,5 % à 60,0 %. Cause : À confirmer.
+- **Plusieurs façons de calculer une part.** En 2020, les femmes pèsent 27,7 % de la durée totale, « autres » inclus (`parite_medias_eda.ipynb`). Elles pèsent environ 35 % de la parole identifiée, femmes + hommes (chiffre clé de la page). Le texte de la page cite « environ 28 % ». Les moyennes par groupe et par média de ce notebook sont des moyennes simples de taux, non pondérées par le volume.
+- **Mesure.** La page indique une segmentation audio automatique. Les fichiers ne donnent pas sa marge d'erreur : À confirmer.
+- **Pas de cause.** Les CSV ne contiennent que des durées. Ils ne disent rien des sujets ni des invités. Les explications avancées dans la page (confinement, recours à des experts) ne se lisent pas dans les données.
+
+## Équipe
 <div align="center">
   <table>
     <tr>
       <td align="center">
         <a href="https://github.com/Rateur">
-          <img src="https://github.com/Rateur.png" alt="Valentin PERIES" width="64" height="64" style="border-radius: 32px;">
+          <img src="https://github.com/Rateur.png" alt="Valentin Périès" width="64" height="64" style="border-radius: 32px;">
         </a>
       </td>
       <td align="center">
@@ -69,40 +158,9 @@
       </td>
     </tr>
     <tr>
-      <td align="center"><sub><strong>Valentin PERIES</strong></sub></td>
+      <td align="center"><sub><strong>Valentin Périès</strong></sub></td>
       <td align="center"><sub><strong>Gautier Gavat</strong></sub></td>
       <td align="center"><sub><strong>Sabry Touam</strong></sub></td>
     </tr>
   </table>
 </div>
-
-## Ressources
-- Defi data.gouv.fr : https://defis.data.gouv.fr/defis/les-francaises-et-francais-face-a-linformation
-- Jeux <a href="https://defis.data.gouv.fr/datasets/603ff508ef46d75437d701f4">CSA/INA 2019-2020</a> sur la parite de la parole : chaines et genres de programmes.
-
-## Reutilisation
-- <a href="https://www.data.gouv.fr/reuses/observatoire-de-la-parite-mediatique">Observatoire de la Parite Mediatique</a> (data.gouv.fr)
-
-## Donnees disponibles
-- `data/chaines.csv` : indicateurs par media/editeur/groupe (volume et taux d'expression femmes/hommes/autres, 2019-2020).
-- `data/genres_programmes.csv` : indicateurs par genre de programme (volumes et taux d'expression, 2019-2020).
-- `notebooks/parite_medias_eda.ipynb` : exploration initiale (parite, evolutions et pistes de visualisations).
-- `notebooks/EDA.ipynb` : notebook de découverte plus large (nettoyage/aperçu des jeux avant visualisation).
-
-## Squelette du depot
-```
-.
-|-- README.md
-|-- index.html
-|-- .gitignore
-|-- data/
-|   |-- chaines.csv
-|   `-- genres_programmes.csv
-`-- notebooks/
-    |-- parite_medias_eda.ipynb
-    `-- EDA.ipynb
-```
-
-## Hebergement
-- Page statique hebergee sur Netlify : https://opendata2025.netlify.app
-- Les graphiques consomment directement les CSV du dossier `data/` (charges cote client).
