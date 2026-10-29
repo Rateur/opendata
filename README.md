@@ -114,17 +114,21 @@ python -m http.server 8000
 Puis http://localhost:8000.
 
 ### Les notebooks
-Pas de fichier `requirements.txt` dans le dépôt. Les imports des notebooks demandent :
+Ils lisent les CSV de `data/` par des chemins relatifs.
 
 ```bash
-pip install pandas numpy matplotlib seaborn scikit-learn jupyterlab
+pip install -r requirements.txt
 cd notebooks
 jupyter lab
 ```
 
-Les deux notebooks ont été exécutés avec Python 3.13.5 (métadonnées des notebooks). Versions des bibliothèques : À confirmer.
+Ou sans interface, depuis la racine :
 
-`EDA.ipynb` lit des chemins Windows écrits en dur (`C:\Users\Utilisateur\Downloads\...`). Remplacez-les par `../data/chaines.csv` et `../data/genres_programmes.csv` pour le relancer.
+```bash
+python -m nbconvert --to notebook --execute --output-dir /tmp notebooks/EDA.ipynb notebooks/parite_medias_eda.ipynb
+```
+
+Relancés en octobre 2026 avec Python 3.13 et les versions de `requirements.txt` : mêmes résultats que les sorties enregistrées.
 
 ## État et limites
 Le site est en ligne. Les données sont des CSV versionnés : rien ne les met à jour. Le dépôt n'a ni tests, ni intégration continue, ni fichier de licence (licence : À confirmer).
@@ -133,9 +137,9 @@ Ce que les données ne permettent pas :
 - **Deux années seulement.** 2019 et 2020 ne font pas une tendance. La droite de `EDA.ipynb` est ajustée sur ces deux points.
 - **Couverture inégale.** `chaines.csv` compte 40 lignes : 35 ont des données 2020, 37 des données 2019, 32 les deux. Les totaux 2019 et 2020 (graphique de volume, projection du notebook) additionnent donc des chaînes différentes.
 - **Durée analysée instable.** Une même chaîne change de volume d'une année à l'autre. BFMTV : 3 095 h en 2019, 1 381 h en 2020. France 4 : 141 h puis 796 h, et son taux passe de 23,5 % à 60,0 %. Cause : À confirmer.
-- **Plusieurs façons de calculer une part.** En 2020, les femmes pèsent 27,7 % de la durée totale, « autres » inclus (`parite_medias_eda.ipynb`). Elles pèsent environ 35 % de la parole identifiée, femmes + hommes (chiffre clé de la page). Le texte de la page cite « environ 28 % ». Les moyennes par groupe et par média de ce notebook sont des moyennes simples de taux, non pondérées par le volume.
+- **Plusieurs façons de calculer une part.** En 2020, les femmes pèsent 27,7 % de la durée totale, « autres » inclus (`parite_medias_eda.ipynb`). Elles pèsent environ 35 % de la parole identifiée, femmes + hommes (chiffre clé de la page). La page donne les deux, avec leur base. Les moyennes par groupe et par média de ce notebook sont des moyennes simples de taux, non pondérées par le volume.
 - **Mesure.** La page indique une segmentation audio automatique. Les fichiers ne donnent pas sa marge d'erreur : À confirmer.
-- **Pas de cause.** Les CSV ne contiennent que des durées. Ils ne disent rien des sujets ni des invités. Les explications avancées dans la page (confinement, recours à des experts) ne se lisent pas dans les données.
+- **Pas de cause.** Les CSV ne contiennent que des durées. Ils ne disent rien des sujets ni des invités. Entre 2019 et 2020, 14 chaînes reculent et 18 progressent ; les données ne permettent pas d'en attribuer la cause au confinement.
 
 ## Équipe
 <div align="center">
