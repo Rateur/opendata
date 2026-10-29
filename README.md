@@ -85,7 +85,7 @@ Les durées sont lues en secondes : `index.html` et `EDA.ipynb` les divisent par
 
 ### Les notebooks
 - `notebooks/parite_medias_eda.ipynb` : exploration avec pandas, seaborn et matplotlib. Volumes 2019 et 2020, groupes audiovisuels, radio contre TV, genres, volume contre taux. Lit `../data/`.
-- `notebooks/EDA.ipynb` : analyse plus poussée. Violons radio / TV, genres, régression linéaire (scikit-learn) sur 2019 et 2020, statut par chaîne. Lit deux fichiers `ina-csa-parole-femmes-*.csv` placés dans un dossier Téléchargements local (voir Limites).
+- `notebooks/EDA.ipynb` : analyse plus poussée. Violons radio / TV, genres, régression linéaire (scikit-learn) sur 2019 et 2020, statut par chaîne. Lit `data/chaines.csv` et `data/genres_programmes.csv`.
 
 ### Squelette du dépôt
 ```
